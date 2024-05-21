@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import logo from "../recursos/LogoBlancoSinFondo.png";
 import "./logeo.css";
-import firebaseApp from "../../credenciales";
+import firebaseApp from "../../../credenciales";
 import {
     getAuth,
     createUserWithEmailAndPassword,
@@ -99,10 +99,7 @@ const Logeo = () => {
                                 <button type="submit">{estaRegistrandose ? "Registrarme" : "Iniciar Sesion"}</button>
                             </div>
                         </form>
-                        <div className="alternativas">
                             <button onClick={() => setEstaRegistrandose(!estaRegistrandose)} className="switch-form">{estaRegistrandose ? "Ya tengo una cuenta" : "No tengo una cuenta, registrarme."}</button>
-                            <button className="acceder-google" onClick={() => signInWithRedirect(auth, googleProvider)}>Acceder con Google</button>
-                        </div>
                     </div>
                 </div>
             </div>

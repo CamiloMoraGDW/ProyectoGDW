@@ -1,0 +1,68 @@
+.home-container {
+    display: flex;
+}
+
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #333;
+    color: #fff;
+    position: fixed;
+    top: 0;
+    left: -250px;
+    transition: left 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+.toggle-button {
+    margin: 10px;
+}
+
+.profile-section {
+    padding: 20px;
+    text-align: center;
+}
+
+.profile-section img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.nav-links {
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    margin: 10px 0;
+}
+
+.logout-button {
+    background-color: #ff4b5c;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    margin: 20px;
+    cursor: pointer;
+}
+
+.content {
+    margin-left: 250px;
+    padding: 20px;
+    width: 100%;
+    transition: margin-left 0.3s ease;
+}
+
+.sidebar-open .content {
+    margin-left: 0;
+}

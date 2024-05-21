@@ -83,6 +83,7 @@ svg {
 }
 
 button{
+    margin-bottom: 5px;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -95,28 +96,19 @@ button:hover{
     cursor: pointer;
 }
 
-.alternativas{
-    display: flex;
-    margin-top: 5px;
-    border-top: 1px solid rgba(255, 255, 255, 0.7);
-    padding: 10px;
-}
-
-.acceder-google,
 .switch-form{
     background-color: transparent;
     color: white;
-    width: 50%;
+    width: 100%;
     text-align: center;
     font-size: 0.9rem;
 }
 
-.acceder-google:hover,
 .switch-form:hover{
     color: #0471A2;
     cursor: pointer;
     background-color: rgba(255, 255, 255, 0.7);
-    transition: 0.3s;
+    transition: 0.5s;
 }
 
 @media (max-width: 860px) {
@@ -144,6 +136,13 @@ button:hover{
     }
 
     .left-side{
+        display: none;
+    }
+
+    button{
+        font-size: 0.9rem;
+    }
+    svg{
         display: none;
     }
 }

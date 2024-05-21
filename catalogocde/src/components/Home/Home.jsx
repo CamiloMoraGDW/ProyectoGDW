@@ -1,5 +1,5 @@
 import React from "react";
-import firebaseApp from "../../credenciales";
+import firebaseApp from "../../../credenciales";
 import { getAuth, signOut } from "firebase/auth";
 const auth = getAuth(firebaseApp);
 
