@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logo from "../recursos/LogoBlancoSinFondo.png";
+import logo from "../../recursos/LogoBlancoSinFondo.png";
 import "./logeo.css";
 import firebaseApp from "../../../credenciales";
 import {

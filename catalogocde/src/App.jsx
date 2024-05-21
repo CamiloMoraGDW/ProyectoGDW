@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import Logeo from './components/logeo'
-import Home from './components/Home'
+import Logeo from './components/Logeo/logeo'
+import Home from './components/Home/Home';
 import firebaseApp from '../credenciales';
 import {getAuth, onAuthStateChanged} from "firebase/auth"
 const auth = getAuth(firebaseApp);
