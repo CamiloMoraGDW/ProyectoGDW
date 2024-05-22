@@ -9,7 +9,7 @@
 .container {
     display: flex;
     height: 100vh;
-    background-image: url("../recursos/fondoOficinaGente.png");
+    background-image: url("../../recursos/fondoOficinaGente.png");
     background-size: cover;
     background-repeat: no-repeat;
 }
@@ -99,8 +99,9 @@ button:hover{
 .switch-form{
     background-color: transparent;
     color: white;
-    width: 100%;
     text-align: center;
+    padding: 5px 20px;
+    width: 100%;
     font-size: 0.9rem;
 }
 

@@ -1,29 +1,51 @@
-import React, { useState } from 'react'
-import Logeo from './components/Logeo/logeo'
-import Home from './components/Home/Home';
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, Navigate } from "react-router-dom"
+import Logeo from './components/2 - Logeo/logeo';
+import Home from './components/1 - vistaHome/Home';
+import Header from './components/parts/header';
+import ListaCDEs from './components/3 - ListadoCDE/listadoCDE';
+import NuevoCDE from './components/4 - NuevoCDE/nuevoCDE';
+import Cuenta from './components/5 - Cuenta/cuenta';
 import firebaseApp from '../credenciales';
-import {getAuth, onAuthStateChanged} from "firebase/auth"
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 const auth = getAuth(firebaseApp);
 
-
 function App() {
-  const [usuarioGlobal, setUsuarioGlobal] = React.useState(null);
+  const [usuarioGlobal, setUsuarioGlobal] = useState(null);
 
-  onAuthStateChanged(auth, (usuarioFirebase)=>{
-    if(usuarioFirebase){
-      //Codigo en caso de que ya este iniciada la secion:
-      setUsuarioGlobal(usuarioFirebase);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (usuarioFirebase) => {
+      if (usuarioFirebase) {
+        setUsuarioGlobal(usuarioFirebase);
+      } else {
+        setUsuarioGlobal(null);
+      }
+    });
 
-    }else{
-      //Codigo en caso de que no haya sesion iniciada.
-      setUsuarioGlobal(null);
-    }
-  })
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []);
+
   return (
     <>
-    {usuarioGlobal ? <Home/> : <Logeo/>}
+      {usuarioGlobal ? (
+        <>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/lista-cdes" element={<ListaCDEs />} />
+            <Route path="/agregar-cde" element={<NuevoCDE />} />
+            <Route path="/cuenta" element={<Cuenta />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </>
+      ) : (
+        <Routes>
+          <Route path="*" element={<Logeo />} />
+        </Routes>
+      )}
     </>
-  )
+  );
 }
 
 export default App;
