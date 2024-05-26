@@ -22,11 +22,6 @@ const Home = () => {
                     <img src={heroIcon} alt="" />
                 </div>
             </div>
-            <div className="cards-container">
-                <div className="card"></div>
-                <div className="card"></div>
-                <div className="card"></div>
-            </div>
         </>
     )
 }
