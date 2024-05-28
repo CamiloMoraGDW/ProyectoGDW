@@ -1,4 +1,4 @@
-.cuenta {
+/* .cuenta {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
@@ -48,15 +48,89 @@ button:disabled {
     background: #aaa;
 }
 
-.profile-picture {
+.profile-picture{
     max-width: 100px;
-    /* Define el ancho máximo */
     max-height: 100px;
-    /* Define la altura máxima */
     object-fit: cover;
-    /* Ajusta la imagen para cubrir el área designada */
 }
 
 .signOut{
+    background-color: rgb(201, 4, 4);
+} */
+
+.cuenta-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #0471A2; /* Fondo azul con transparencia */
+}
+
+.cuenta {
+    width: 400px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9); /* Fondo blanco con transparencia */
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.cuenta h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.input-group input,
+.input-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.input-group textarea {
+    resize: vertical;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between; /* Coloca los botones uno al lado del otro */
+}
+
+.buttons button {
+    flex: 1; /* Los botones ocupan el mismo espacio */
+    margin-right: 5px; /* Margen derecho para separar los botones */
+}
+
+button {
+    width: 100%;
+    padding: 8px; /* Reduzco el padding para hacer los botones más pequeños */
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:disabled {
+    background: #aaa;
+}
+
+.profile-picture {
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: cover;
+}
+
+.signOut {
     background-color: rgb(201, 4, 4);
 }

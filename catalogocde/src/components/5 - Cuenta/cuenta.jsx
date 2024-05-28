@@ -5,6 +5,7 @@ import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { firestore, auth, storage } from '../../../credenciales';
 import './Cuenta.css';
+import '../parts/header.css'
 
 const Cuenta = () => {
     const [user, setUser] = useState(null);
@@ -69,51 +70,54 @@ const Cuenta = () => {
     };
 
     return (
-        <div className="cuenta">
-            <h1>Cuenta</h1>
-            <div className="input-group">
-                <label htmlFor="name">Nombre</label>
-                <p>{name}</p>
+        <div className="cuenta-container">
+
+            <div className="cuenta">
+                <h1>Cuenta</h1>
+                <div className="input-group">
+                    <label htmlFor="name">Nombre</label>
+                    <p>{name}</p>
+                </div>
+                <div className="input-group">
+                    <label htmlFor="profilePicture">Foto de Perfil</label>
+                    <img src={profilePicURL} alt="Perfil" className="profile-picture" />
+                </div>
+                <div className="input-group">
+                    <label htmlFor="description">Descripción</label>
+                    <p>{description}</p>
+                </div>
+                {editing ? (
+                    <form onSubmit={handleSubmit}>
+                        <div className="input-group">
+                            <label htmlFor="name">Nuevo nombre</label>
+                            <input
+                                type="text"
+                                id="name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
+                        </div>
+                        <div className="input-group">
+                            <label htmlFor="profilePicture">Nueva foto de perfil</label>
+                            <input type="file" id="profilePicture" onChange={handleFileChange} />
+                        </div>
+                        <div className="input-group">
+                            <label htmlFor="description">Nueva descripción</label>
+                            <textarea
+                                id="description"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                            />
+                        </div>
+                        <button type="submit" disabled={uploading}>
+                            {uploading ? 'Guardando...' : 'Guardar'}
+                        </button>
+                    </form>
+                ) : (
+                    <button onClick={() => setEditing(true)}>Editar perfil</button>
+                )}
+                <button className='signOut' onClick={() => signOut(auth)}>Cerrar Sesion</button>
             </div>
-            <div className="input-group">
-                <label htmlFor="profilePicture">Foto de Perfil</label>
-                <img src={profilePicURL} alt="Perfil" className="profile-picture" />
-            </div>
-            <div className="input-group">
-                <label htmlFor="description">Descripción</label>
-                <p>{description}</p>
-            </div>
-            {editing ? (
-                <form onSubmit={handleSubmit}>
-                    <div className="input-group">
-                        <label htmlFor="name">Nuevo nombre</label>
-                        <input
-                            type="text"
-                            id="name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                    </div>
-                    <div className="input-group">
-                        <label htmlFor="profilePicture">Nueva foto de perfil</label>
-                        <input type="file" id="profilePicture" onChange={handleFileChange} />
-                    </div>
-                    <div className="input-group">
-                        <label htmlFor="description">Nueva descripción</label>
-                        <textarea
-                            id="description"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                        />
-                    </div>
-                    <button type="submit" disabled={uploading}>
-                        {uploading ? 'Guardando...' : 'Guardar'}
-                    </button>
-                </form>
-            ) : (
-                <button onClick={() => setEditing(true)}>Editar perfil</button>
-            )}
-            <button className='signOut' onClick={() => signOut(auth)}>Cerrar Sesion</button>
         </div>
     );
 };

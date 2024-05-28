@@ -1,8 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-*{
+* {
     font-family: 'Poppins';
 }
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -10,6 +11,7 @@
     padding: 10px 10px;
     background-color: #0471A2;
     color: white;
+
 }
 
 .header-logo .logo {
@@ -21,10 +23,13 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    align-items: center; /* Añadir esta línea para alinear los elementos de la lista verticalmente */
 }
 
 .header-nav li {
     margin: 0 15px;
+    display: flex;
+    align-items: center; /* Añadir esta línea para alinear el contenido de los elementos de la lista verticalmente */
 }
 
 .header-nav a {
@@ -32,13 +37,19 @@
     padding: 1px 4px;
     text-decoration: none;
     font-size: 16px;
-}
-
-.header-nav a:hover{
-    background-color: rgba(4, 113, 162, 0.2);
+    display: flex;
+    align-items: center; /* Añadir esta línea para alinear el texto de los enlaces verticalmente */
 }
 
 .header-nav a:hover {
+    background-color: rgba(4, 113, 162, 0.2);
     text-decoration: underline;
 }
 
+.profile-picture {
+    width: 40px; /* Define el ancho deseado */
+    height: 40px; /* Define la altura deseada */
+    border-radius: 50%; /* Hace que la imagen sea redonda */
+    object-fit: cover; /* Ajusta la imagen para cubrir el área designada */
+    margin-right: 8px; /* Añadir un pequeño margen a la derecha para espaciar la imagen del texto */
+}
