@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from "react-router-dom"
 import Logeo from './components/2 - Logeo/logeo';
-import Home from './components/1 - vistaHome/Home';
 import Header from './components/parts/header';
+import Home from './components/1 - vistaHome/Home';
 import ListaCDEs from './components/3 - ListadoCDE/listadoCDE';
-import NuevoCDE from './components/4 - NuevoCDE/nuevoCDE';
+import NuevoCDE from './components/4 - NuevoCDE/agregarCDE';
 import Cuenta from './components/5 - Cuenta/cuenta';
 import firebaseApp from '../credenciales';
 import { getAuth, onAuthStateChanged } from "firebase/auth";

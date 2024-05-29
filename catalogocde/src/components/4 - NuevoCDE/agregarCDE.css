@@ -1,0 +1,23 @@
+.agregar-container{
+    display: flex;
+    justify-content: center;
+    background-image: url("../../recursos/fondoOficinaGente.png");
+}
+
+.agregar-cde{
+    background-color: aliceblue;
+    width: 50%;
+    margin: 20px;
+    padding: 10px;
+    border-radius: 20px;
+}
+
+.agregar-cde form input{
+    width: 95%;
+    margin: 5px;
+}
+
+.remove-tag{
+    background-color: brown;
+    
+}

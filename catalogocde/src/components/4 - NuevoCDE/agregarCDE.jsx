@@ -33,7 +33,7 @@ const AgregarCDE = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-        
+
         const cdeData = {
             name,
             client,
@@ -57,68 +57,72 @@ const AgregarCDE = () => {
     };
 
     return (
-        <div className="agregar-cde">
-            <h1>Agregar CDE</h1>
-            <form onSubmit={handleSubmit}>
-                <div className="input-group">
-                    <label htmlFor="name">Nombre</label>
-                    <input
-                        type="text"
-                        id="name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="input-group">
-                    <label htmlFor="client">Cliente</label>
-                    <input
-                        type="text"
-                        id="client"
-                        value={client}
-                        onChange={(e) => setClient(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="input-group">
-                    <label htmlFor="country">País</label>
-                    <input
-                        type="text"
-                        id="country"
-                        value={country}
-                        onChange={(e) => setCountry(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="input-group">
-                    <label htmlFor="creationDate">Fecha de creación</label>
-                    <input
-                        type="date"
-                        id="creationDate"
-                        value={creationDate}
-                        onChange={(e) => setCreationDate(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="input-group">
-                    <label>Tags</label>
-                    {tags.map((tag, index) => (
-                        <div key={index} className="tag-group">
-                            <input
-                                type="text"
-                                value={tag}
-                                onChange={(e) => handleTagChange(index, e.target.value)}
-                            />
-                            <button type="button" onClick={() => handleRemoveTag(index)}>Eliminar</button>
-                        </div>
-                    ))}
-                    {tags.length < 15 && (
-                        <button type="button" onClick={handleAddTag}>Agregar Tag</button>
-                    )}
-                </div>
-                {error && <p className="error">{error}</p>}
-                <button type="submit">Guardar CDE</button>
-            </form>
+        <div className="agregar-container">
+            <div className="agregar-cde">
+                <h1>Agregar CDE</h1>
+                <form onSubmit={handleSubmit}>
+                    <div className="input-group">
+                        <label htmlFor="name">Nombre</label>
+                        <input
+                            type="text"
+                            id="name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="input-group">
+                        <label htmlFor="client">Cliente</label>
+                        <input
+                            type="text"
+                            id="client"
+                            value={client}
+                            onChange={(e) => setClient(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="input-group">
+                        <label htmlFor="country">País</label>
+                        <input
+                            type="text"
+                            id="country"
+                            value={country}
+                            onChange={(e) => setCountry(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="input-group">
+                        <label htmlFor="creationDate">Fecha de creación</label>
+                        <input
+                            type="date"
+                            id="creationDate"
+                            value={creationDate}
+                            onChange={(e) => setCreationDate(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="input-group">
+                        <label>Tags</label>
+                        {tags.map((tag, index) => (
+                            <div key={index} className="tag-group">
+                                <input
+                                    type="text"
+                                    value={tag}
+                                    onChange={(e) => handleTagChange(index, e.target.value)}
+                                />
+                                <button type="button" className="remove-tag" onClick={() => handleRemoveTag(index)}>Eliminar</button>
+                            </div>
+                        ))}
+                        {tags.length < 15 && (
+                            <button type="button" className="add-tag" onClick={handleAddTag}>Agregar Tag</button>
+                        )}
+                    </div>
+                    {error && <p className="error">{error}</p>}
+                    <div className="buttons">
+                        <button type="submit">Guardar CDE</button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };

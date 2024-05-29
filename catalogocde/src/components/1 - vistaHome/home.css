@@ -6,14 +6,16 @@
 
 .container {
     background-image: url("../../recursos/fondoOficinaGente.png");
-    /* background-size: cover; */
-    /* background-repeat: no-repeat; */
+    background-size: cover;
+    background-repeat: no-repeat;
     color: white;
+    object-fit: cover;
 }
 
 .left-side {
     display: flex;
     align-items: center;
+    object-fit: cover;
     padding: 50px;
     width: 50%;
     color: white;
@@ -34,9 +36,47 @@
     font-size: 1.3rem;
 }
 
+.right-side {
+    display: flex;
+    align-items: center;
+    object-fit: cover;
+    padding: 50px;
+    width: 50%;
+    color: white;
+}
+
 .right-side img {
     width: 400px;
     height: 400px;
     border-radius: 50%;
 }
 
+@media(max-width:1090px){
+    .left-side{
+        width: 100%;
+    }
+    
+    .right-side{
+        display: none;
+    }
+}
+
+@media(max-width:860px){
+    .container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .left-side{
+        width: 100%;
+    }
+
+    .left-side p{
+        display: none;
+    }
+    
+    .right-side{
+        display: none;
+    }
+}

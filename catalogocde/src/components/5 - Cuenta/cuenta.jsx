@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import firebaseApp from '../../../credenciales';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { firestore, auth, storage } from '../../../credenciales';
 import './Cuenta.css';
-import '../parts/header.css'
+import '../parts/header.css';
 
 const Cuenta = () => {
     const [user, setUser] = useState(null);
     const [name, setName] = useState('');
     const [profilePicture, setProfilePicture] = useState(null);
-    const [description, setDescription] = useState('');
     const [editing, setEditing] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [profilePicURL, setProfilePicURL] = useState('');
+    const [role, setRole] = useState(''); // Cargo seleccionado
+    const [roles, setRoles] = useState(['Admin', 'Comercial', 'Partner']); // Roles disponibles
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -31,7 +31,7 @@ const Cuenta = () => {
         if (userDoc.exists()) {
             const data = userDoc.data();
             setName(data.name || '');
-            setDescription(data.description || '');
+            setRole(data.role || ''); // Cargar el cargo del usuario
             if (data.profilePicture) {
                 setProfilePicURL(data.profilePicture);
             }
@@ -46,7 +46,7 @@ const Cuenta = () => {
 
         const userData = {
             name,
-            description,
+            role, // Guardar el cargo seleccionado
         };
 
         if (profilePicture) {
@@ -71,7 +71,6 @@ const Cuenta = () => {
 
     return (
         <div className="cuenta-container">
-
             <div className="cuenta">
                 <h1>Cuenta</h1>
                 <div className="input-group">
@@ -83,8 +82,8 @@ const Cuenta = () => {
                     <img src={profilePicURL} alt="Perfil" className="profile-picture" />
                 </div>
                 <div className="input-group">
-                    <label htmlFor="description">Descripción</label>
-                    <p>{description}</p>
+                    <label htmlFor="role">Cargo</label>
+                    <p>{role}</p>
                 </div>
                 {editing ? (
                     <form onSubmit={handleSubmit}>
@@ -102,26 +101,35 @@ const Cuenta = () => {
                             <input type="file" id="profilePicture" onChange={handleFileChange} />
                         </div>
                         <div className="input-group">
-                            <label htmlFor="description">Nueva descripción</label>
-                            <textarea
-                                id="description"
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                            />
+                            <label htmlFor="role">Nuevo cargo</label>
+                            <select
+                                id="role"
+                                value={role}
+                                onChange={(e) => setRole(e.target.value)}
+                            >
+                                {roles.map((role) => (
+                                    <option key={role} value={role}>
+                                        {role}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
-                        <button type="submit" disabled={uploading}>
-                            {uploading ? 'Guardando...' : 'Guardar'}
-                        </button>
+                        <div className="buttons">
+                            <button type="submit" disabled={uploading}>
+                                {uploading ? 'Guardando...' : 'Guardar'}
+                            </button>
+                            <button type="button" className='cancel' onClick={() => setEditing(false)}>Cancelar</button>
+                        </div>
                     </form>
                 ) : (
-                    <button onClick={() => setEditing(true)}>Editar perfil</button>
+                    <div className="buttons">
+                        <button onClick={() => setEditing(true)}>Editar perfil</button>
+                        <button className='signOut' onClick={() => signOut(auth)}>Cerrar Sesión</button>
+                    </div>
                 )}
-                <button className='signOut' onClick={() => signOut(auth)}>Cerrar Sesion</button>
             </div>
         </div>
     );
 };
 
 export default Cuenta;
-
-
