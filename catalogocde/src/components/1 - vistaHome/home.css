@@ -65,10 +65,11 @@
     .container{
         display: flex;
         justify-content: center;
-        align-items: center;
     }
 
     .left-side{
+        object-fit: cover;
+        margin-top: 50%;
         width: 100%;
     }
 

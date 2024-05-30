@@ -1,107 +1,132 @@
 import React, { useState, useEffect } from 'react';
 import { firestore } from '../../../credenciales';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import './ListadoCDE.css';
 
 const ListadoCDE = () => {
     const [cdes, setCdes] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
-    const [filters, setFilters] = useState({
+    const [editCde, setEditCde] = useState(null);
+    const [updatedData, setUpdatedData] = useState({
         name: '',
         client: '',
         country: '',
         creationDate: '',
     });
-    const [searchResults, setSearchResults] = useState([]);
-    const [noResults, setNoResults] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
         const fetchCdes = async () => {
             const querySnapshot = await getDocs(collection(firestore, 'cdes'));
-            const cdeList = querySnapshot.docs.map(doc => doc.data());
+            const cdeList = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
             setCdes(cdeList);
         };
 
         fetchCdes();
     }, []);
 
-    const handleFilterChange = (e) => {
-        const { name, value } = e.target;
-        setFilters({
-            ...filters,
-            [name]: value,
-        });
-    };
-
     const handleSearch = () => {
+        if (!searchTerm) return;
+
         const filteredCdes = cdes.filter(cde => {
             return (
-                (!filters.name || cde.name.toLowerCase().includes(filters.name.toLowerCase())) &&
-                (!filters.client || cde.client.toLowerCase().includes(filters.client.toLowerCase())) &&
-                (!filters.country || cde.country.toLowerCase().includes(filters.country.toLowerCase())) &&
-                (!filters.creationDate || cde.creationDate === filters.creationDate)
+                cde.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                cde.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                cde.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                cde.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
             );
         });
 
-        setSearchResults(filteredCdes);
-        setNoResults(filteredCdes.length === 0);
+        setCdes(filteredCdes);
+    };
+
+    const handleEdit = (cde) => {
+        setEditCde(cde);
+        setUpdatedData({
+            name: cde.name,
+            client: cde.client,
+            country: cde.country,
+            creationDate: cde.creationDate,
+        });
+    };
+
+    const handleUpdate = async () => {
+        setIsSaving(true);
+        try {
+            await updateDoc(doc(firestore, 'cdes', editCde.id), updatedData);
+            setCdes(cdes.map(cde => (cde.id === editCde.id ? { ...cde, ...updatedData } : cde)));
+            setEditCde(null);
+            alert('CDE actualizado correctamente');
+        } catch (error) {
+            console.error('Error actualizando el CDE:', error);
+            alert('Hubo un error actualizando el CDE.');
+        }
+        setIsSaving(false);
+    };
+
+    const handleDelete = async (id) => {
+        try {
+            await deleteDoc(doc(firestore, 'cdes', id));
+            setCdes(cdes.filter(cde => cde.id !== id));
+            alert('CDE eliminado correctamente');
+        } catch (error) {
+            console.error('Error eliminando el CDE:', error);
+            alert('Hubo un error eliminando el CDE.');
+        }
     };
 
     return (
         <div className="listado-container">
             <h1>Listado de CDEs</h1>
-            <div className="filters">
-                <div className="input-group">
-                    <label>Nombre:</label>
-                    <input
-                        type="text"
-                        name="name"
-                        value={filters.name}
-                        onChange={handleFilterChange}
-                    />
-                </div>
-                <div className="input-group">
-                    <label>Cliente:</label>
-                    <input
-                        type="text"
-                        name="client"
-                        value={filters.client}
-                        onChange={handleFilterChange}
-                    />
-                </div>
-                <div className="input-group">
-                    <label>País:</label>
-                    <input
-                        type="text"
-                        name="country"
-                        value={filters.country}
-                        onChange={handleFilterChange}
-                    />
-                </div>
-                <div className="input-group">
-                    <label>Fecha de creación:</label>
-                    <input
-                        type="date"
-                        name="creationDate"
-                        value={filters.creationDate}
-                        onChange={handleFilterChange}
-                    />
-                </div>
-                <div className="search-bar">
-                    <input
-                        type="text"
-                        placeholder="Buscar..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    <button onClick={handleSearch}>Buscar</button>
-                </div>
+            <div className="search-bar">
+                <input
+                    type="text"
+                    placeholder="Buscar por nombre, cliente, país o tag..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <button onClick={handleSearch}>Buscar</button>
             </div>
-            {noResults && <p>No se encontraron resultados.</p>}
             <div className="cde-list">
-                {searchResults.map((cde, index) => (
-                    <div key={index} className="cde-item">
-                        <h2>{cde.name}</h2>
+                {cdes.map((cde) => (
+                    <div key={cde.id} className="cde-item">
+                        {editCde && editCde.id === cde.id ? (
+                            <div>
+                                <input
+                                    type="text"
+                                    value={updatedData.name}
+                                    onChange={(e) => setUpdatedData({ ...updatedData, name: e.target.value })}
+                                />
+                                <input
+                                    type="text"
+                                    value={updatedData.client}
+                                    onChange={(e) => setUpdatedData({ ...updatedData, client: e.target.value })}
+                                />
+                                <input
+                                    type="text"
+                                    value={updatedData.country}
+                                    onChange={(e) => setUpdatedData({ ...updatedData, country: e.target.value })}
+                                />
+                                <input
+                                    type="date"
+                                    value={updatedData.creationDate}
+                                    onChange={(e) => setUpdatedData({ ...updatedData, creationDate: e.target.value })}
+                                />
+                                <button onClick={handleUpdate} disabled={isSaving}>
+                                    {isSaving ? 'Guardando...' : 'Guardar'}
+                                </button>
+                                <button onClick={() => setEditCde(null)}>Cancelar</button>
+                            </div>
+                        ) : (
+                            <div>
+                                <h2>{cde.name}</h2>
+                                <p><strong>Cliente:</strong> {cde.client}</p>
+                                <p><strong>País:</strong> {cde.country}</p>
+                                <p><strong>Fecha de creación:</strong> {cde.creationDate}</p>
+                                <button onClick={() => handleEdit(cde)}>Editar</button>
+                                <button onClick={() => handleDelete(cde.id)}>Eliminar</button>
+                            </div>
+                        )}
                     </div>
                 ))}
             </div>
