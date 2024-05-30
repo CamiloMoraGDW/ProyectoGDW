@@ -5,7 +5,7 @@
 }
 
 .agregar-cde{
-    background-color: aliceblue;
+    background-color: rgba(240, 248, 255, 0.8);
     width: 50%;
     margin: 20px;
     padding: 10px;
@@ -13,11 +13,11 @@
 }
 
 .agregar-cde form input{
-    width: 95%;
-    margin: 5px;
+    background-color: aliceblue;
+    width: 99.5%;
+    margin-bottom: 5px;
 }
 
 .remove-tag{
     background-color: brown;
-    
 }

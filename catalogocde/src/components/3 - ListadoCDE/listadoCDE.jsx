@@ -5,6 +5,7 @@ import './ListadoCDE.css';
 
 const ListadoCDE = () => {
     const [cdes, setCdes] = useState([]);
+    const [originalCdes, setOriginalCdes] = useState([]); // Nueva variable para almacenar la lista original
     const [searchTerm, setSearchTerm] = useState('');
     const [editCde, setEditCde] = useState(null);
     const [updatedData, setUpdatedData] = useState({
@@ -20,20 +21,25 @@ const ListadoCDE = () => {
             const querySnapshot = await getDocs(collection(firestore, 'cdes'));
             const cdeList = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
             setCdes(cdeList);
+            setOriginalCdes(cdeList); // Almacena la lista original
         };
 
         fetchCdes();
     }, []);
 
     const handleSearch = () => {
-        if (!searchTerm) return;
+        const lowercasedSearchTerm = searchTerm.toLowerCase();
+        const filteredCdes = originalCdes.filter(cde => {
+            const lowercasedName = cde.name.toLowerCase();
+            const lowercasedClient = cde.client.toLowerCase();
+            const lowercasedCountry = cde.country.toLowerCase();
+            const lowercasedTags = cde.tags.map(tag => tag.toLowerCase());
 
-        const filteredCdes = cdes.filter(cde => {
             return (
-                cde.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                cde.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                cde.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                cde.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+                lowercasedName.includes(lowercasedSearchTerm) ||
+                lowercasedClient.includes(lowercasedSearchTerm) ||
+                lowercasedCountry.includes(lowercasedSearchTerm) ||
+                lowercasedTags.some(tag => tag.includes(lowercasedSearchTerm))
             );
         });
 
@@ -68,7 +74,7 @@ const ListadoCDE = () => {
         try {
             await deleteDoc(doc(firestore, 'cdes', id));
             setCdes(cdes.filter(cde => cde.id !== id));
-            alert('CDE eliminado correctamente');
+            setOriginalCdes(originalCdes.filter(cde => cde.id !== id)); // Actualiza la lista original
         } catch (error) {
             console.error('Error eliminando el CDE:', error);
             alert('Hubo un error eliminando el CDE.');
@@ -86,27 +92,35 @@ const ListadoCDE = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <button onClick={handleSearch}>Buscar</button>
+                <button onClick={() => {
+                    setSearchTerm(''); // Restablece el término de búsqueda
+                    setCdes(originalCdes); // Restaura la lista original
+                }}>Limpiar</button>
             </div>
             <div className="cde-list">
                 {cdes.map((cde) => (
                     <div key={cde.id} className="cde-item">
                         {editCde && editCde.id === cde.id ? (
                             <div>
+                                <p><b>Nombre:</b></p>
                                 <input
                                     type="text"
                                     value={updatedData.name}
                                     onChange={(e) => setUpdatedData({ ...updatedData, name: e.target.value })}
                                 />
+                                <p><b>Cliente:</b></p>
                                 <input
                                     type="text"
                                     value={updatedData.client}
                                     onChange={(e) => setUpdatedData({ ...updatedData, client: e.target.value })}
                                 />
+                                <p><b>Pais:</b></p>
                                 <input
                                     type="text"
                                     value={updatedData.country}
                                     onChange={(e) => setUpdatedData({ ...updatedData, country: e.target.value })}
                                 />
+                                <p><b>Fecha de alta:</b></p>
                                 <input
                                     type="date"
                                     value={updatedData.creationDate}
@@ -123,8 +137,12 @@ const ListadoCDE = () => {
                                 <p><strong>Cliente:</strong> {cde.client}</p>
                                 <p><strong>País:</strong> {cde.country}</p>
                                 <p><strong>Fecha de creación:</strong> {cde.creationDate}</p>
+                                <h4>
+                                    <a href={cde.link} target="_blank" rel="noopener noreferrer">PDF</a>
+                                </h4>
                                 <button onClick={() => handleEdit(cde)}>Editar</button>
                                 <button onClick={() => handleDelete(cde.id)}>Eliminar</button>
+                                
                             </div>
                         )}
                     </div>

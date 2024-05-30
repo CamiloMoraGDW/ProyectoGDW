@@ -9,6 +9,7 @@ const AgregarCDE = () => {
     const [country, setCountry] = useState('');
     const [creationDate, setCreationDate] = useState('');
     const [tags, setTags] = useState(['']);
+    const [link, setLink] = useState(''); 
     const [error, setError] = useState('');
 
     const handleAddTag = () => {
@@ -40,6 +41,7 @@ const AgregarCDE = () => {
             country,
             creationDate,
             tags: tags.filter(tag => tag.trim() !== ''),
+            link
         };
 
         try {
@@ -88,6 +90,16 @@ const AgregarCDE = () => {
                             id="country"
                             value={country}
                             onChange={(e) => setCountry(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="input-group">
+                        <label htmlFor="link">Enlace del PDF</label>
+                        <input
+                            type="text"
+                            id="link"
+                            value={link}
+                            onChange={(e) => setLink(e.target.value)}
                             required
                         />
                     </div>
