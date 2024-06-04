@@ -65,7 +65,7 @@ h1 {
 }
 
 input {
-    width: calc(100% - 30px);
+    width: 100%;
     padding: 10px;
     border-radius: 5px;
     border: none;

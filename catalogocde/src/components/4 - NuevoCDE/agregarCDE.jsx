@@ -9,7 +9,13 @@ const AgregarCDE = () => {
     const [country, setCountry] = useState('');
     const [creationDate, setCreationDate] = useState('');
     const [tags, setTags] = useState(['']);
-    const [link, setLink] = useState(''); 
+    const [link, setLink] = useState('');
+    const [ref, setRef] = useState('');
+    const [vertical, setVertical] = useState('');
+    const [comercial, setComercial] = useState('');
+    const [sector, setSector] = useState('');
+    const [tipo, setTipo] = useState('');
+
     const [error, setError] = useState('');
 
     const handleAddTag = () => {
@@ -41,7 +47,11 @@ const AgregarCDE = () => {
             country,
             creationDate,
             tags: tags.filter(tag => tag.trim() !== ''),
-            link
+            link,
+            ref,
+            vertical,
+            sector,
+            tipo
         };
 
         try {
@@ -52,6 +62,11 @@ const AgregarCDE = () => {
             setCountry('');
             setCreationDate('');
             setTags(['']);
+            setRef(['']);
+            setVertical(['']);
+            setComercial(['']);
+            setSector(['']);
+            setTipo(['']);
         } catch (error) {
             console.error('Error añadiendo CDE: ', error);
             setError('Hubo un error añadiendo el CDE.');
@@ -64,7 +79,7 @@ const AgregarCDE = () => {
                 <h1>Agregar CDE</h1>
                 <form onSubmit={handleSubmit}>
                     <div className="input-group">
-                        <label htmlFor="name">Nombre</label>
+                        <label htmlFor="name">Nombre de CDE</label>
                         <input
                             type="text"
                             id="name"
@@ -90,6 +105,16 @@ const AgregarCDE = () => {
                             id="country"
                             value={country}
                             onChange={(e) => setCountry(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="input-group">
+                        <label htmlFor="country">Referente de Proyecto</label>
+                        <input
+                            type="text"
+                            id="ref"
+                            value={ref}
+                            onChange={(e) => setRef(e.target.value)}
                             required
                         />
                     </div>

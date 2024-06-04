@@ -28,6 +28,15 @@ const ListadoCDE = () => {
         fetchCdes();
     }, []);
 
+    const handleClean = () => {
+        const fetchCdes = async () => {
+            const querySnapshot = await getDocs(collection(firestore, 'cdes'));
+            const cdeList = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+            setCdes(cdeList);
+        };
+        fetchCdes();
+    }
+
     const handleSearch = () => {
         const lowercasedSearchTerm = searchTerm.toLowerCase();
         const filteredCdes = cdes.filter(cde => {
@@ -106,12 +115,14 @@ const ListadoCDE = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <button onClick={handleSearch}>Buscar</button>
+                <button onClick={handleClean}>Limpirar</button>
             </div>
             <div className="cde-list">
                 {cdes.map((cde) => (
                     <div key={cde.id} className="cde-item">
                         {editCde && editCde.id === cde.id ? (
                             <div>
+                                <p><b>Nombre: </b></p>
                                 <input
                                     type="text"
                                     value={updatedData.name}
@@ -139,12 +150,11 @@ const ListadoCDE = () => {
                             </div>
                         ) : (
                             <div>
-                                <h2>
-                                    <a href={cde.link} target="_blank" rel="noopener noreferrer">{cde.name}</a>
-                                </h2>
+                                <h2>{cde.name}</h2>
                                 <p><strong>Cliente:</strong> {cde.client}</p>
                                 <p><strong>País:</strong> {cde.country}</p>
                                 <p><strong>Fecha de creación:</strong> {cde.creationDate}</p>
+                                <a href={cde.link} target="_blank" rel="noopener noreferrer">Descargar</a><br />
                                 <button onClick={() => handleEdit(cde)}>Editar</button>
                                 <button onClick={() => handleDelete(cde.id)}>Eliminar</button>
                             </div>
