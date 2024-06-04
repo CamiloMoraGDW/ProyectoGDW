@@ -7,7 +7,7 @@
     box-sizing: border-box;
 }
 
-body{
+body {
     background-color: rgba(4, 113, 162, 0.5);
 }
 
@@ -70,7 +70,7 @@ body{
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.cde-item input{
+.cde-item input {
     background-color: aliceblue;
 }
 
@@ -104,4 +104,49 @@ body{
 
 .cde-item button:last-child {
     background-color: brown;
+}
+
+/* Estilo del popup de confirmación */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.popup button {
+    margin: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.popup button:first-of-type {
+    background-color: #d9534f;
+    color: white;
+}
+
+.popup button:last-of-type {
+    background-color: #5bc0de;
+    color: white;
+}
+
+.popup p {
+    margin: 10px;
+    font-size: 1.2em;
+    color: #333;
 }

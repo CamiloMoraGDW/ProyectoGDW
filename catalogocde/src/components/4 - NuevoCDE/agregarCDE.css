@@ -1,7 +1,6 @@
 .agregar-container{
     display: flex;
     justify-content: center;
-    background-image: url("../../recursos/fondoOficinaGente.png");
 }
 
 .agregar-cde{

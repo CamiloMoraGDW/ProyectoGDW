@@ -5,7 +5,6 @@ import './ListadoCDE.css';
 
 const ListadoCDE = () => {
     const [cdes, setCdes] = useState([]);
-    const [originalCdes, setOriginalCdes] = useState([]); // Nueva variable para almacenar la lista original
     const [searchTerm, setSearchTerm] = useState('');
     const [editCde, setEditCde] = useState(null);
     const [updatedData, setUpdatedData] = useState({
@@ -15,13 +14,15 @@ const ListadoCDE = () => {
         creationDate: '',
     });
     const [isSaving, setIsSaving] = useState(false);
+    const [showConfirmPopup, setShowConfirmPopup] = useState(false); // Estado para controlar el popup
+    const [cdeToDelete, setCdeToDelete] = useState(null); // Estado para almacenar el CDE a eliminar
+    const [isDeleting, setIsDeleting] = useState(false); // Estado para controlar el indicador de carga
 
     useEffect(() => {
         const fetchCdes = async () => {
             const querySnapshot = await getDocs(collection(firestore, 'cdes'));
             const cdeList = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
             setCdes(cdeList);
-            setOriginalCdes(cdeList); // Almacena la lista original
         };
 
         fetchCdes();
@@ -29,7 +30,7 @@ const ListadoCDE = () => {
 
     const handleSearch = () => {
         const lowercasedSearchTerm = searchTerm.toLowerCase();
-        const filteredCdes = originalCdes.filter(cde => {
+        const filteredCdes = cdes.filter(cde => {
             const lowercasedName = cde.name.toLowerCase();
             const lowercasedClient = cde.client.toLowerCase();
             const lowercasedCountry = cde.country.toLowerCase();
@@ -70,15 +71,28 @@ const ListadoCDE = () => {
         setIsSaving(false);
     };
 
-    const handleDelete = async (id) => {
+    const handleDelete = (id) => {
+        setCdeToDelete(id);
+        setShowConfirmPopup(true);
+    };
+
+    const confirmDelete = async () => {
+        setIsDeleting(true); // Mostrar el indicador de carga
         try {
-            await deleteDoc(doc(firestore, 'cdes', id));
-            setCdes(cdes.filter(cde => cde.id !== id));
-            setOriginalCdes(originalCdes.filter(cde => cde.id !== id)); // Actualiza la lista original
+            await deleteDoc(doc(firestore, 'cdes', cdeToDelete));
+            setCdes(cdes.filter(cde => cde.id !== cdeToDelete));
+            setShowConfirmPopup(false);
+            setCdeToDelete(null);
         } catch (error) {
             console.error('Error eliminando el CDE:', error);
             alert('Hubo un error eliminando el CDE.');
         }
+        setIsDeleting(false); // Ocultar el indicador de carga
+    };
+
+    const cancelDelete = () => {
+        setShowConfirmPopup(false);
+        setCdeToDelete(null);
     };
 
     return (
@@ -92,35 +106,27 @@ const ListadoCDE = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <button onClick={handleSearch}>Buscar</button>
-                <button onClick={() => {
-                    setSearchTerm(''); // Restablece el término de búsqueda
-                    setCdes(originalCdes); // Restaura la lista original
-                }}>Limpiar</button>
             </div>
             <div className="cde-list">
                 {cdes.map((cde) => (
                     <div key={cde.id} className="cde-item">
                         {editCde && editCde.id === cde.id ? (
                             <div>
-                                <p><b>Nombre:</b></p>
                                 <input
                                     type="text"
                                     value={updatedData.name}
                                     onChange={(e) => setUpdatedData({ ...updatedData, name: e.target.value })}
                                 />
-                                <p><b>Cliente:</b></p>
                                 <input
                                     type="text"
                                     value={updatedData.client}
                                     onChange={(e) => setUpdatedData({ ...updatedData, client: e.target.value })}
                                 />
-                                <p><b>Pais:</b></p>
                                 <input
                                     type="text"
                                     value={updatedData.country}
                                     onChange={(e) => setUpdatedData({ ...updatedData, country: e.target.value })}
                                 />
-                                <p><b>Fecha de alta:</b></p>
                                 <input
                                     type="date"
                                     value={updatedData.creationDate}
@@ -133,21 +139,35 @@ const ListadoCDE = () => {
                             </div>
                         ) : (
                             <div>
-                                <h2>{cde.name}</h2>
+                                <h2>
+                                    <a href={cde.link} target="_blank" rel="noopener noreferrer">{cde.name}</a>
+                                </h2>
                                 <p><strong>Cliente:</strong> {cde.client}</p>
                                 <p><strong>País:</strong> {cde.country}</p>
                                 <p><strong>Fecha de creación:</strong> {cde.creationDate}</p>
-                                <h4>
-                                    <a href={cde.link} target="_blank" rel="noopener noreferrer">PDF</a>
-                                </h4>
                                 <button onClick={() => handleEdit(cde)}>Editar</button>
                                 <button onClick={() => handleDelete(cde.id)}>Eliminar</button>
-                                
                             </div>
                         )}
                     </div>
                 ))}
             </div>
+
+            {showConfirmPopup && (
+                <div className="popup-overlay">
+                    <div className="popup">
+                        <h3>¿Está seguro que desea eliminar este CDE?</h3>
+                        {isDeleting ? (
+                            <p>Cargando...</p> // Mostrar "Cargando..." mientras se elimina
+                        ) : (
+                            <>
+                                <button onClick={confirmDelete}>Sí, eliminar</button>
+                                <button onClick={cancelDelete}>Cancelar</button>
+                            </>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

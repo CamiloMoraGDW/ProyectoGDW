@@ -14,7 +14,7 @@
     background-repeat: no-repeat;
 }
 
-.left-side{
+.log-left-side{
     width: 50%;
     display: flex;
     justify-content: center;
@@ -22,16 +22,16 @@
     padding: 50px;
 }
 
-.left-side .content{
+.log-left-side .content{
     display: inline;
 }
-.left-side .content .texto {
+.log-left-side .content .texto {
     color: #fff;
     font-size: 1.3rem;
     padding-left: 20px;
 }
 
-.right-side{
+.log-right-side{
     width: 50%;
     display: flex;
     justify-content: center;
