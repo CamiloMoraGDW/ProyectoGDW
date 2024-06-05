@@ -1,9 +1,16 @@
+//Importando React.
 import React from "react";
+//Importando el componente header.
 import Header from "../parts/header";
+//Importando logo de GDW.
 import logo from "../../recursos/LogoBlancoSinFondo.png";
+//Importando el icono grafico.
 import heroIcon from "../../recursos/heroIcon.png";
-import { getAuth, signOut } from "firebase/auth";
+//Importando dependencias de Autenticacion 
+import { getAuth} from "firebase/auth";
+//Importando el estilo del componente home
 import "./home.css";
+//Importando dependencias de Firebase
 import firebaseApp from "../../../credenciales";
 
 const auth = getAuth(firebaseApp);
