@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { firestore } from '../../../credenciales';
 import { collection, getDocs, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import './ListadoCDE.css';
+import { ref } from 'firebase/storage';
 
 const ListadoCDE = () => {
     const [cdes, setCdes] = useState([]);
@@ -12,6 +13,10 @@ const ListadoCDE = () => {
         client: '',
         country: '',
         creationDate: '',
+        ref: '',
+        vertical: '',
+        sector:'',
+        tipo:''
     });
     const [isSaving, setIsSaving] = useState(false);
     const [showConfirmPopup, setShowConfirmPopup] = useState(false); // Estado para controlar el popup
@@ -44,6 +49,11 @@ const ListadoCDE = () => {
             const lowercasedClient = cde.client.toLowerCase();
             const lowercasedCountry = cde.country.toLowerCase();
             const lowercasedTags = cde.tags.map(tag => tag.toLowerCase());
+            const lowercasedRef = cde.ref.toLowerCase();
+            const lowercasedVertical = cde.vertical.toLowerCase();
+            const lowercasedSecor = cde.sector.toLowerCase();
+            const lowercasedTipo = cde.tipo.toLowerCase();
+
 
             return (
                 lowercasedName.includes(lowercasedSearchTerm) ||
@@ -63,6 +73,10 @@ const ListadoCDE = () => {
             client: cde.client,
             country: cde.country,
             creationDate: cde.creationDate,
+            ref: cde.ref,
+            vertical: cde.vertical,
+            sector: cde.sector,
+            tipo: cde.tipo
         });
     };
 

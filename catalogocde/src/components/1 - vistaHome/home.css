@@ -38,9 +38,9 @@
 
 .right-side {
     display: flex;
+    justify-content: center;
     align-items: center;
     object-fit: cover;
-    padding: 50px;
     width: 50%;
     color: white;
 }
@@ -62,6 +62,22 @@
 }
 
 @media(max-width:860px){
+    /* .container{
+        display: flex;
+        justify-content: center;
+    } */
+
+    .left-side{
+        margin-top: 60px;
+        width: 100%;
+    }
+    
+    .right-side{
+        display: none;
+    }
+}
+
+@media(max-width:50px){
     .container{
         display: flex;
         justify-content: center;
@@ -79,5 +95,5 @@
     
     .right-side{
         display: none;
-    }
+    }    
 }

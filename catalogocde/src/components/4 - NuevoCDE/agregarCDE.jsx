@@ -1,13 +1,19 @@
+//Importando React y Estados de React
 import React, { useState } from 'react';
+//Importando la base de datos de Firebase
 import { firestore } from '../../../credenciales';
+//Importo las tablas de la base de datos
 import { collection, addDoc } from 'firebase/firestore';
+//Importo el estilo de este componente.
 import './agregarCDE.css';
 
 const AgregarCDE = () => {
+    //Creo los estados para cada datos del formulario
     const [name, setName] = useState('');
     const [client, setClient] = useState('');
     const [country, setCountry] = useState('');
     const [creationDate, setCreationDate] = useState('');
+    //Este es una Array de tags
     const [tags, setTags] = useState(['']);
     const [link, setLink] = useState('');
     const [ref, setRef] = useState('');
@@ -15,9 +21,10 @@ const AgregarCDE = () => {
     const [comercial, setComercial] = useState('');
     const [sector, setSector] = useState('');
     const [tipo, setTipo] = useState('');
-
+    //Estado para manejo de errores
     const [error, setError] = useState('');
 
+    //Funcion para agregar un tag
     const handleAddTag = () => {
         if (tags.length < 15) {
             setTags([...tags, '']);
@@ -37,6 +44,9 @@ const AgregarCDE = () => {
         setTags(newTags);
     };
 
+
+
+    //Funcion para enviar todos los datos del formulario a la base de datos
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
@@ -118,6 +128,42 @@ const AgregarCDE = () => {
                             required
                         />
                     </div>
+                    <div className="input-group">
+                        <label htmlFor="vertical">Vertical</label>
+                        <input
+                            type="text"
+                            id="vertical"
+                            value={vertical}
+                            onChange={(e) => setRef(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="input-group">
+                        <label htmlFor="comercial">Comercial</label>
+                        <input
+                            type="text"
+                            id="comercial"
+                            value={comercial}
+                            onChange={(e) => setRef(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="input-group">
+                        <label htmlFor="tipo">Tipo de Proyecto</label>
+                        <input
+                            type="text"
+                            id="tipo"
+                            value={tipo}
+                            onChange={(e) => setRef(e.target.value)}
+                            required
+                        />
+                    </div>
+
+
+
+
+
+
                     <div className="input-group">
                         <label htmlFor="link">Enlace del PDF</label>
                         <input
