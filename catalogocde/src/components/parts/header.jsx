@@ -21,7 +21,7 @@ const Header = () => {
         });
         return () => unsubscribe();
     }, []);
-    
+
     return (
         <header className="header">
             <div className="header-logo">

@@ -7,7 +7,7 @@ import logo from "../../recursos/LogoBlancoSinFondo.png";
 //Importando el icono grafico.
 import heroIcon from "../../recursos/heroIcon.png";
 //Importando dependencias de Autenticacion 
-import { getAuth} from "firebase/auth";
+import { getAuth } from "firebase/auth";
 //Importando el estilo del componente home
 import "./home.css";
 //Importando dependencias de Firebase

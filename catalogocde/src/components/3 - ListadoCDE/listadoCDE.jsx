@@ -15,8 +15,8 @@ const ListadoCDE = () => {
         creationDate: '',
         ref: '',
         vertical: '',
-        sector:'',
-        tipo:''
+        sector: '',
+        tipo: ''
     });
     const [isSaving, setIsSaving] = useState(false);
     const [showConfirmPopup, setShowConfirmPopup] = useState(false); // Estado para controlar el popup

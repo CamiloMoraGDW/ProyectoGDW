@@ -88,117 +88,117 @@ const AgregarCDE = () => {
             <div className="agregar-cde">
                 <h1>Agregar CDE</h1>
                 <form onSubmit={handleSubmit}>
-                    <div className="input-group">
-                        <label htmlFor="name">Nombre de CDE</label>
-                        <input
-                            type="text"
-                            id="name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="input-group">
-                        <label htmlFor="client">Cliente</label>
-                        <input
-                            type="text"
-                            id="client"
-                            value={client}
-                            onChange={(e) => setClient(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="input-group">
-                        <label htmlFor="country">País</label>
-                        <input
-                            type="text"
-                            id="country"
-                            value={country}
-                            onChange={(e) => setCountry(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="input-group">
-                        <label htmlFor="country">Referente de Proyecto</label>
-                        <input
-                            type="text"
-                            id="ref"
-                            value={ref}
-                            onChange={(e) => setRef(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="input-group">
-                        <label htmlFor="vertical">Vertical</label>
-                        <input
-                            type="text"
-                            id="vertical"
-                            value={vertical}
-                            onChange={(e) => setRef(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="input-group">
-                        <label htmlFor="comercial">Comercial</label>
-                        <input
-                            type="text"
-                            id="comercial"
-                            value={comercial}
-                            onChange={(e) => setRef(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="input-group">
-                        <label htmlFor="tipo">Tipo de Proyecto</label>
-                        <input
-                            type="text"
-                            id="tipo"
-                            value={tipo}
-                            onChange={(e) => setRef(e.target.value)}
-                            required
-                        />
-                    </div>
+                    <div>
+                        <div className="input-group">
+                            <label htmlFor="name">Nombre de CDE</label>
+                            <input
+                                type="text"
+                                id="name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="input-group">
+                            <label htmlFor="client">Cliente</label>
+                            <input
+                                type="text"
+                                id="client"
+                                value={client}
+                                onChange={(e) => setClient(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="input-group">
+                            <label htmlFor="country">País</label>
+                            <input
+                                type="text"
+                                id="country"
+                                value={country}
+                                onChange={(e) => setCountry(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="input-group">
+                            <label htmlFor="country">Referente de Proyecto</label>
+                            <input
+                                type="text"
+                                id="ref"
+                                value={ref}
+                                onChange={(e) => setRef(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="input-group">
+                            <label htmlFor="vertical">Vertical</label>
+                            <input
+                                type="text"
+                                id="vertical"
+                                value={vertical}
+                                onChange={(e) => setRef(e.target.value)}
+                                required
+                            />
+                        </div>
 
-
-
-
-
-
-                    <div className="input-group">
-                        <label htmlFor="link">Enlace del PDF</label>
-                        <input
-                            type="text"
-                            id="link"
-                            value={link}
-                            onChange={(e) => setLink(e.target.value)}
-                            required
-                        />
                     </div>
-                    <div className="input-group">
-                        <label htmlFor="creationDate">Fecha de creación</label>
-                        <input
-                            type="date"
-                            id="creationDate"
-                            value={creationDate}
-                            onChange={(e) => setCreationDate(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="input-group">
-                        <label>Tags</label>
-                        {tags.map((tag, index) => (
-                            <div key={index} className="tag-group">
-                                <input
-                                    type="text"
-                                    value={tag}
-                                    onChange={(e) => handleTagChange(index, e.target.value)}
-                                />
-                                <button type="button" className="remove-tag" onClick={() => handleRemoveTag(index)}>Eliminar</button>
-                            </div>
-                        ))}
-                        {tags.length < 15 && (
-                            <button type="button" className="add-tag" onClick={handleAddTag}>Agregar Tag</button>
-                        )}
+                    <div>
+
+                        <div className="input-group">
+                            <label htmlFor="comercial">Comercial</label>
+                            <input
+                                type="text"
+                                id="comercial"
+                                value={comercial}
+                                onChange={(e) => setRef(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="input-group">
+                            <label htmlFor="tipo">Tipo de Proyecto</label>
+                            <input
+                                type="text"
+                                id="tipo"
+                                value={tipo}
+                                onChange={(e) => setRef(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="input-group">
+                            <label htmlFor="link">Enlace del PDF</label>
+                            <input
+                                type="text"
+                                id="link"
+                                value={link}
+                                onChange={(e) => setLink(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="input-group">
+                            <label htmlFor="creationDate">Fecha de creación</label>
+                            <input
+                                type="date"
+                                id="creationDate"
+                                value={creationDate}
+                                onChange={(e) => setCreationDate(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="input-group">
+                            <label>Tags</label>
+                            {tags.map((tag, index) => (
+                                <div key={index} className="tag-group">
+                                    <input
+                                        type="text"
+                                        value={tag}
+                                        onChange={(e) => handleTagChange(index, e.target.value)}
+                                    />
+                                    <button type="button" className="remove-tag" onClick={() => handleRemoveTag(index)}>Eliminar</button>
+                                </div>
+                            ))}
+                            {tags.length < 15 && (
+                                <button type="button" className="add-tag" onClick={handleAddTag}>Agregar Tag</button>
+                            )}
+                        </div>
                     </div>
                     {error && <p className="error">{error}</p>}
                     <div className="buttons">
