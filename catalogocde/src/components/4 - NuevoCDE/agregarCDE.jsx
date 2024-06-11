@@ -1,85 +1,90 @@
-//Importando React y Estados de React
 import React, { useState } from 'react';
-//Importando la base de datos de Firebase
-import { firestore } from '../../../credenciales';
-//Importo las tablas de la base de datos
-import { collection, addDoc } from 'firebase/firestore';
-//Importo el estilo de este componente.
+import { firestore, storage } from '../../../credenciales'; // Importar Firebase Firestore
+import { collection, addDoc } from 'firebase/firestore'; // Importar Firestore
+import { ref as storageRef, uploadBytes } from 'firebase/storage';
+import PDFToText from 'react-pdftotext';
 import './agregarCDE.css';
 
 const AgregarCDE = () => {
-    //Creo los estados para cada datos del formulario
+    // Creo los estados para cada dato del formulario
     const [name, setName] = useState('');
     const [client, setClient] = useState('');
     const [country, setCountry] = useState('');
     const [creationDate, setCreationDate] = useState('');
-    //Este es una Array de tags
-    const [tags, setTags] = useState(['']);
-    const [link, setLink] = useState('');
-    const [ref, setRef] = useState('');
+    const [projectRef, setProjectRef] = useState('');
     const [vertical, setVertical] = useState('');
     const [comercial, setComercial] = useState('');
     const [sector, setSector] = useState('');
     const [tipo, setTipo] = useState('');
-    //Estado para manejo de errores
+    const [pdfFile, setPdfFile] = useState(null);
+    const [pdfText, setPdfText] = useState('');
     const [error, setError] = useState('');
 
-    //Funcion para agregar un tag
-    const handleAddTag = () => {
-        if (tags.length < 15) {
-            setTags([...tags, '']);
-        } else {
-            setError('Se puede agregar un máximo de 15 tags.');
-        }
+    // Función para manejar el cambio de archivo PDF
+    const handlePdfChange = (e) => {
+        const file = e.target.files[0];
+        setPdfFile(file);
+
+        // Extraer texto del PDF utilizando PDFToText (react-pdftotext)
+        PDFToText(file, async (err, text) => {
+            if (err) {
+                console.error('Error extrayendo texto del PDF:', err);
+                setError('Hubo un error extrayendo texto del PDF.');
+                return;
+            }
+            setPdfText(text);
+        });
+
     };
 
-    const handleTagChange = (index, value) => {
-        const newTags = [...tags];
-        newTags[index] = value;
-        setTags(newTags);
-    };
-
-    const handleRemoveTag = (index) => {
-        const newTags = tags.filter((_, i) => i !== index);
-        setTags(newTags);
-    };
-
-
-
-    //Funcion para enviar todos los datos del formulario a la base de datos
+    // Función para manejar el envío del formulario
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
 
-        const cdeData = {
-            name,
-            client,
-            country,
-            creationDate,
-            tags: tags.filter(tag => tag.trim() !== ''),
-            link,
-            ref,
-            vertical,
-            sector,
-            tipo
-        };
+        if (!pdfFile) {
+            setError('Por favor, sube un archivo PDF.');
+            return;
+        }
 
         try {
-            await addDoc(collection(firestore, 'cdes'), cdeData);
+            // Subir el PDF a Firebase Storage
+            const storageReference = storageRef(storage, `pdfs/${pdfFile.name}`);
+            await uploadBytes(storageReference, pdfFile);
+            alert('PDF subido correctamente');
+            setPdfFile(null);
+
+            // Agregar los datos del CDE a Firestore
+            const cdeData = {
+                name,
+                client,
+                country,
+                creationDate,
+                pdfURL: storageReference.fullPath,
+                pdfText,
+                projectRef,
+                vertical,
+                sector,
+                tipo
+            };
+            const docRef = await addDoc(collection(firestore, 'cdes'), cdeData);
             alert('CDE añadido correctamente');
+
+            // Limpiar estados después de enviar el formulario
             setName('');
             setClient('');
             setCountry('');
             setCreationDate('');
-            setTags(['']);
-            setRef(['']);
-            setVertical(['']);
-            setComercial(['']);
-            setSector(['']);
-            setTipo(['']);
+            setPdfFile(null);
+            setPdfText('');
+            setProjectRef('');
+            setVertical('');
+            setComercial('');
+            setSector('');
+            setTipo('');
         } catch (error) {
-            console.error('Error añadiendo CDE: ', error);
-            setError('Hubo un error añadiendo el CDE.');
+            console.error('Error subiendo el PDF a Firebase Storage:', error);
+            setError('Hubo un error subiendo el PDF a Firebase Storage.');
         }
     };
 
@@ -120,12 +125,12 @@ const AgregarCDE = () => {
                             />
                         </div>
                         <div className="input-group">
-                            <label htmlFor="country">Referente de Proyecto</label>
+                            <label htmlFor="projectRef">Referente de Proyecto</label>
                             <input
                                 type="text"
-                                id="ref"
-                                value={ref}
-                                onChange={(e) => setRef(e.target.value)}
+                                id="projectRef"
+                                value={projectRef}
+                                onChange={(e) => setProjectRef(e.target.value)}
                                 required
                             />
                         </div>
@@ -135,21 +140,19 @@ const AgregarCDE = () => {
                                 type="text"
                                 id="vertical"
                                 value={vertical}
-                                onChange={(e) => setRef(e.target.value)}
+                                onChange={(e) => setVertical(e.target.value)}
                                 required
                             />
                         </div>
-
                     </div>
                     <div>
-
                         <div className="input-group">
                             <label htmlFor="comercial">Comercial</label>
                             <input
                                 type="text"
                                 id="comercial"
                                 value={comercial}
-                                onChange={(e) => setRef(e.target.value)}
+                                onChange={(e) => setComercial(e.target.value)}
                                 required
                             />
                         </div>
@@ -159,17 +162,17 @@ const AgregarCDE = () => {
                                 type="text"
                                 id="tipo"
                                 value={tipo}
-                                onChange={(e) => setRef(e.target.value)}
+                                onChange={(e) => setTipo(e.target.value)}
                                 required
                             />
                         </div>
                         <div className="input-group">
-                            <label htmlFor="link">Enlace del PDF</label>
+                            <label htmlFor="pdf">Subir PDF</label>
                             <input
-                                type="text"
-                                id="link"
-                                value={link}
-                                onChange={(e) => setLink(e.target.value)}
+                                type="file"
+                                id="pdf"
+                                accept="application/pdf"
+                                onChange={handlePdfChange}
                                 required
                             />
                         </div>
@@ -182,22 +185,6 @@ const AgregarCDE = () => {
                                 onChange={(e) => setCreationDate(e.target.value)}
                                 required
                             />
-                        </div>
-                        <div className="input-group">
-                            <label>Tags</label>
-                            {tags.map((tag, index) => (
-                                <div key={index} className="tag-group">
-                                    <input
-                                        type="text"
-                                        value={tag}
-                                        onChange={(e) => handleTagChange(index, e.target.value)}
-                                    />
-                                    <button type="button" className="remove-tag" onClick={() => handleRemoveTag(index)}>Eliminar</button>
-                                </div>
-                            ))}
-                            {tags.length < 15 && (
-                                <button type="button" className="add-tag" onClick={handleAddTag}>Agregar Tag</button>
-                            )}
                         </div>
                     </div>
                     {error && <p className="error">{error}</p>}

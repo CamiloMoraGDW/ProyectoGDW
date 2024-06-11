@@ -168,7 +168,7 @@ const ListadoCDE = () => {
                                 <p><strong>Cliente:</strong> {cde.client}</p>
                                 <p><strong>País:</strong> {cde.country}</p>
                                 <p><strong>Fecha de creación:</strong> {cde.creationDate}</p>
-                                <a href={cde.link} target="_blank" rel="noopener noreferrer">Descargar</a><br />
+                                <a href={cde.pdfURL} target="_blank" rel="noopener noreferrer">Descargar</a><br />
                                 <button onClick={() => handleEdit(cde)}>Editar</button>
                                 <button onClick={() => handleDelete(cde.id)}>Eliminar</button>
                             </div>
