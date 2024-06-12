@@ -9,7 +9,7 @@ import Header from './components/parts/header';
 // Importa el componente Home
 import Home from './components/1 - vistaHome/Home'; 
 // Importa el componente ListaCDEs
-import ListaCDEs from './components/3 - ListadoCDE/ListadoCDE'; 
+import ListadoCDE from './components/3 - ListadoCDE/listadoCDE'
 // Importa el componente NuevoCDE
 import NuevoCDE from './components/4 - NuevoCDE/agregarCDE'; 
 // Importa el componente Cuenta
@@ -51,7 +51,7 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" element={<Home />} /> {/* Ruta principal */}
-            <Route path="/lista-cdes" element={<ListaCDEs />} /> {/* Ruta para listar CDEs */}
+            <Route path="/listado-cde's" element={<ListadoCDE />} /> {/* Ruta para listar CDEs */}
             <Route path="/agregar-cde" element={<NuevoCDE />} /> {/* Ruta para agregar un nuevo CDE */}
             <Route path="/cuenta" element={<Cuenta />} /> {/* Ruta para la cuenta del usuario */}
             <Route path="*" element={<Navigate to="/" />} /> {/* Ruta por defecto, redirige a la página principal */}

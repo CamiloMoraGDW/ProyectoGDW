@@ -31,7 +31,7 @@ const Header = () => {
             </div>
             <nav className="header-nav">
                 <ul>
-                    <li><Link to="/lista-cdes">Lista de CDE's</Link></li>
+                    <li><Link to="/listado-cde's">Lista de CDE's</Link></li>
                     <li><Link to="/agregar-cde">Agregar CDE</Link></li>
                     <li>
                         <Link to="/cuenta">

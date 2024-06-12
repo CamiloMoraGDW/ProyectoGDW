@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { firestore } from '../../../credenciales';
 import { collection, getDocs, updateDoc, deleteDoc, doc } from 'firebase/firestore';
-import './ListadoCDE.css';
+import './listadoCDE.css';
 import { ref } from 'firebase/storage';
 
 const ListadoCDE = () => {
