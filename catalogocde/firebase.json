@@ -6,5 +6,15 @@
       "**/.*",
       "**/node_modules/**"
     ]
+  },
+  "database": {
+    "rules": "database.rules.json"
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "y"
+  },
+  "storage": {
+    "rules": "storage.rules"
   }
 }
