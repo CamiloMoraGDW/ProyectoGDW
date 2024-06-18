@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-*{
+* {
     margin: 0;
     padding: 0;
     font-family: 'Poppins';
@@ -9,12 +9,12 @@
 .container {
     display: flex;
     height: 100vh;
-    background-image: url("../../recursos/fondoOficinaGente.png");
+    background-image: url("../../img/fondoOficinaGente.png");
     background-size: cover;
     background-repeat: no-repeat;
 }
 
-.log-left-side{
+.log-left-side {
     width: 50%;
     display: flex;
     justify-content: center;
@@ -22,16 +22,17 @@
     padding: 50px;
 }
 
-.log-left-side .content{
+.log-left-side .content {
     display: inline;
 }
+
 .log-left-side .content .texto {
     color: #fff;
     font-size: 1.3rem;
     padding-left: 20px;
 }
 
-.log-right-side{
+.log-right-side {
     width: 50%;
     display: flex;
     justify-content: center;
@@ -40,7 +41,8 @@
 }
 
 .form-box {
-    background-color: rgba(255, 255, 255, 0.6); /* Fondo blanco con transparencia */
+    background-color: rgba(255, 255, 255, 0.6);
+    /* Fondo blanco con transparencia */
     width: 300px;
     padding: 20px;
     border-radius: 10px;
@@ -71,7 +73,8 @@ input {
     border: none;
     border-bottom: 2px solid aliceblue;
     outline: none;
-    background-color: transparent; /* Input transparente */
+    background-color: transparent;
+    /* Input transparente */
 }
 
 svg {
@@ -82,7 +85,7 @@ svg {
     max-width: 20px;
 }
 
-button{
+button {
     margin-bottom: 5px;
     padding: 10px 20px;
     border: none;
@@ -92,11 +95,11 @@ button{
     font-size: 16px;
 }
 
-button:hover{
+button:hover {
     cursor: pointer;
 }
 
-.switch-form{
+.switch-form {
     background-color: transparent;
     color: white;
     text-align: center;
@@ -105,7 +108,7 @@ button:hover{
     font-size: 0.9rem;
 }
 
-.switch-form:hover{
+.switch-form:hover {
     color: #0471A2;
     cursor: pointer;
     background-color: rgba(255, 255, 255, 0.7);
@@ -114,36 +117,37 @@ button:hover{
 
 @media (max-width: 860px) {
 
-    .left-side .content{
+    .left-side .content {
         display: flex;
         justify-content: center;
         align-items: center;
     }
 
-    .left-side .content .logoGDW{
+    .left-side .content .logoGDW {
         max-width: 200px;
     }
 
-    .left-side .content .texto{
+    .left-side .content .texto {
         display: none;
     }
 }
 
 @media (max-width: 700px) {
-    .container{
+    .container {
         display: flex;
         justify-content: center;
         align-items: center;
     }
 
-    .left-side{
+    .left-side {
         display: none;
     }
 
-    button{
+    button {
         font-size: 0.9rem;
     }
-    svg{
+
+    svg {
         display: none;
     }
 }

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { getDoc, doc } from "firebase/firestore";
-import { firestore, auth } from "../../../credenciales";
-import logo from "../../recursos/LogoBlancoSinFondo.png";
-import "./header.css";
+import { firestore, auth } from "../../../../credenciales";
+import logo from "../../../img/LogoBlancoSinFondo.png";
+import './header.css'
 
 const Header = () => {
     const [profilePicURL, setProfilePicURL] = useState('');
@@ -31,7 +31,7 @@ const Header = () => {
             </div>
             <nav className="header-nav">
                 <ul>
-                    <li><Link to="/listado-cde's">Lista de CDE's</Link></li>
+                    <li><Link to="/lista-cdes">Lista de CDE's</Link></li>
                     <li><Link to="/agregar-cde">Agregar CDE</Link></li>
                     <li>
                         <Link to="/cuenta">

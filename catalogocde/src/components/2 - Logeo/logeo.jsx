@@ -1,14 +1,12 @@
 import React, { useState } from "react";
-import logo from "../../recursos/LogoBlancoSinFondo.png";
+import logo from "../../img/LogoBlancoSinFondo.png";
 import "./logeo.css";
 import firebaseApp from "../../../credenciales";
-import {
-    getAuth,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-} from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
 
 const auth = getAuth(firebaseApp);
+const firestore = getFirestore(firebaseApp);
 
 const Logeo = () => {
     const [estaRegistrandose, setEstaRegistrandose] = useState(false);
@@ -39,6 +37,7 @@ const Logeo = () => {
         try {
             if (estaRegistrandose) {
                 const usuario = await createUserWithEmailAndPassword(auth, email, password);
+                await setDoc(doc(firestore, "users", usuario.user.uid), { email, role: "lector" });
                 console.log(usuario);
             } else {
                 const usuario = await signInWithEmailAndPassword(auth, email, password);
@@ -72,7 +71,7 @@ const Logeo = () => {
     return (
         <>
             <div className="container">
-                <div className="log-left-side">
+                <div className="left-side">
                     <div className="content">
                         <div className="logoGDW">
                             <img src={logo} alt="" />
@@ -82,7 +81,7 @@ const Logeo = () => {
                         </div>
                     </div>
                 </div>
-                <div className="log-right-side">
+                <div className="right-side">
                     <div className="form-box">
                         <form onSubmit={submitHandler}>
                             <h1>{estaRegistrandose ? "Registrate" : "Iniciar Sesion"}</h1>

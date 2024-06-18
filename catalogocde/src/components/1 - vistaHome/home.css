@@ -5,7 +5,7 @@
 }
 
 .container {
-    background-image: url("../../recursos/fondoOficinaGente.png");
+    background-image: url("../../img/fondoOficinaGente.png");
     background-size: cover;
     background-repeat: no-repeat;
     color: white;
@@ -51,49 +51,49 @@
     border-radius: 50%;
 }
 
-@media(max-width:1090px){
-    .left-side{
+@media(max-width:1090px) {
+    .left-side {
         width: 100%;
     }
-    
-    .right-side{
+
+    .right-side {
         display: none;
     }
 }
 
-@media(max-width:860px){
+@media(max-width:860px) {
     /* .container{
         display: flex;
         justify-content: center;
     } */
 
-    .left-side{
+    .left-side {
         margin-top: 60px;
         width: 100%;
     }
-    
-    .right-side{
+
+    .right-side {
         display: none;
     }
 }
 
-@media(max-width:50px){
-    .container{
+@media(max-width:50px) {
+    .container {
         display: flex;
         justify-content: center;
     }
 
-    .left-side{
+    .left-side {
         object-fit: cover;
         margin-top: 50%;
         width: 100%;
     }
 
-    .left-side p{
+    .left-side p {
         display: none;
     }
-    
-    .right-side{
+
+    .right-side {
         display: none;
-    }    
+    }
 }

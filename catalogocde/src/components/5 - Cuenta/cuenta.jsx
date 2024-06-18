@@ -4,7 +4,7 @@ import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { firestore, auth, storage } from '../../../credenciales';
 import './Cuenta.css';
-import '../parts/header.css';
+import '../parts/header/header.css';
 
 const Cuenta = () => {
     const [user, setUser] = useState(null);

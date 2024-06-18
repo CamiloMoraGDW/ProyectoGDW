@@ -1,11 +1,11 @@
 //Importando React.
 import React from "react";
 //Importando el componente header.
-import Header from "../parts/header";
+import Header from "../parts/header/header";
 //Importando logo de GDW.
-import logo from "../../recursos/LogoBlancoSinFondo.png";
+import logo from "../../img/LogoBlancoSinFondo.png";
 //Importando el icono grafico.
-import heroIcon from "../../recursos/heroIcon.png";
+import heroIcon from "../../img/heroIcon.png";
 //Importando dependencias de Autenticacion 
 import { getAuth } from "firebase/auth";
 //Importando el estilo del componente home

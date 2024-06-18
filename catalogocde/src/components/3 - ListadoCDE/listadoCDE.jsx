@@ -3,6 +3,7 @@ import { firestore } from '../../../credenciales';
 import { collection, getDocs, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import './listadoCDE.css';
 import { ref } from 'firebase/storage';
+import { degrees } from 'pdf-lib';
 
 const ListadoCDE = () => {
     const [cdes, setCdes] = useState([]);
