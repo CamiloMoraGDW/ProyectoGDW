@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { firestore } from '../../../credenciales';
 import { collection, getDocs, updateDoc, deleteDoc, doc } from 'firebase/firestore';
-import './listadoCDE.css';
+import './listadoCDE.css'
 import { ref } from 'firebase/storage';
-import { degrees } from 'pdf-lib';
 
 const ListadoCDE = () => {
     const [cdes, setCdes] = useState([]);
@@ -165,10 +164,16 @@ const ListadoCDE = () => {
                             </div>
                         ) : (
                             <div>
-                                <h2>{cde.name}</h2>
-                                <p><strong>Cliente:</strong> {cde.client}</p>
-                                <p><strong>País:</strong> {cde.country}</p>
-                                <p><strong>Fecha de creación:</strong> {cde.creationDate}</p>
+                                <div className="left-facts">
+                                    <h2>{cde.name}</h2>
+                                    <p><strong>Cliente:</strong> {cde.client}</p>
+                                    <p><strong>País:</strong> {cde.country}</p>
+                                    <p><strong>Fecha de creación:</strong> {cde.creationDate}</p>
+                                </div>
+                                <div className="right-facts">
+                                    <p><strong>Referente de Proyecto:</strong> {cde.ref}</p>
+                                    <p><strong>Vertical:</strong> {cde.vertical}</p>
+                                </div>
                                 <a href={cde.pdfURL} target="_blank" rel="noopener noreferrer">Descargar</a><br />
                                 <button onClick={() => handleEdit(cde)}>Editar</button>
                                 <button onClick={() => handleDelete(cde.id)}>Eliminar</button>

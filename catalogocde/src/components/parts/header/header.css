@@ -10,7 +10,7 @@
     align-items: center;
     height: 70px;
     padding: 15px 15px;
-    background-color: #0471A2;
+    background-color: rgb(2, 2, 2);
     color: white;
 
 }
@@ -24,13 +24,15 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    align-items: center; /* Añadir esta línea para alinear los elementos de la lista verticalmente */
+    align-items: center;
+    /* Añadir esta línea para alinear los elementos de la lista verticalmente */
 }
 
 .header-nav li {
     margin: 0 15px;
     display: flex;
-    align-items: center; /* Añadir esta línea para alinear el contenido de los elementos de la lista verticalmente */
+    align-items: center;
+    /* Añadir esta línea para alinear el contenido de los elementos de la lista verticalmente */
 }
 
 .header-nav a {
@@ -39,18 +41,26 @@
     text-decoration: none;
     font-size: 16px;
     display: flex;
-    align-items: center; /* Añadir esta línea para alinear el texto de los enlaces verticalmente */
+    align-items: center;
+    /* Añadir esta línea para alinear el texto de los enlaces verticalmente */
 }
 
 .header-nav a:hover {
-    background-color: rgba(4, 113, 162, 0.2);
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
     text-decoration: underline;
+    transition: 500ms;
 }
 
 .profile-picture {
-    width: 40px; /* Define el ancho deseado */
-    height: 40px; /* Define la altura deseada */
-    border-radius: 50%; /* Hace que la imagen sea redonda */
-    object-fit: cover; /* Ajusta la imagen para cubrir el área designada */
-    margin-right: 8px; /* Añadir un pequeño margen a la derecha para espaciar la imagen del texto */
+    width: 40px;
+    /* Define el ancho deseado */
+    height: 40px;
+    /* Define la altura deseada */
+    border-radius: 50%;
+    /* Hace que la imagen sea redonda */
+    object-fit: cover;
+    /* Ajusta la imagen para cubrir el área designada */
+    margin-right: 8px;
+    /* Añadir un pequeño margen a la derecha para espaciar la imagen del texto */
 }

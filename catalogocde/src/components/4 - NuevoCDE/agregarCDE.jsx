@@ -3,17 +3,16 @@ import { firestore, storage } from '../../../credenciales';
 import { collection, addDoc } from 'firebase/firestore';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import './agregarCDE.css';
-import { createWorker } from 'tesseract.js';
 
 const AgregarCDE = () => {
   const [name, setName] = useState('');
+  const [sector, setSector] = useState('');
   const [client, setClient] = useState('');
   const [country, setCountry] = useState('');
   const [creationDate, setCreationDate] = useState('');
   const [projectRef, setProjectRef] = useState('');
   const [vertical, setVertical] = useState('');
   const [comercial, setComercial] = useState('');
-  const [sector, setSector] = useState('');
   const [tipo, setTipo] = useState('');
   const [pdfFile, setPdfFile] = useState(null);
   const [pdfText, setPdfText] = useState('');
@@ -25,23 +24,6 @@ const AgregarCDE = () => {
   const handlePdfChange = async (e) => {
     const file = e.target.files[0];
     setPdfFile(file);
-
-    // Extraer texto del PDF utilizando PDF.js
-    const loadingTask = pdfjsLib.getDocument(file);
-    const pdf = await loadingTask.promise;
-
-    let fullText = '';
-
-    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-      const page = await pdf.getPage(pageNum);
-      const textContent = await page.getTextContent();
-
-      textContent.items.forEach(item => {
-        fullText += item.str + ' ';
-      });
-    }
-
-    setPdfText(fullText);
   };
 
 
@@ -63,6 +45,7 @@ const AgregarCDE = () => {
 
       const cdeData = {
         name,
+        sector,
         client,
         country,
         creationDate,
@@ -70,13 +53,13 @@ const AgregarCDE = () => {
         pdfText,
         projectRef,
         vertical,
-        sector,
         tipo
       };
       await addDoc(collection(firestore, 'cdes'), cdeData);
       alert('CDE añadido correctamente');
 
       setName('');
+      setSector('');
       setClient('');
       setCountry('');
       setCreationDate('');
@@ -85,7 +68,7 @@ const AgregarCDE = () => {
       setProjectRef('');
       setVertical('');
       setComercial('');
-      setSector('');
+
       setTipo('');
     } catch (error) {
       console.error('Error subiendo el PDF a Firebase Storage:', error);
@@ -111,6 +94,13 @@ const AgregarCDE = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
+              />
+            </div>
+            <div className="input-group">
+              <label htmlFor="name">Sector</label>
+              <input
+                type="text"
+
               />
             </div>
             <div className="input-group">
@@ -182,7 +172,7 @@ const AgregarCDE = () => {
                 id="pdf"
                 accept="application/pdf"
                 onChange={handlePdfChange}
-                required
+              // required
               />
             </div>
             <div className="input-group">

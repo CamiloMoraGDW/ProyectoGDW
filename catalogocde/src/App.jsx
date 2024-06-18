@@ -3,13 +3,13 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Logeo from './components/2 - Logeo/logeo';
 import Header from './components/parts/header/header';
 import Home from './components/1 - vistaHome/Home';
-import ListadoCDE from './components/3 - ListadoCDE/listadoCDE';
+import NuevoCDE from './components/4 - NuevoCDE/agregarCDE';
 import Cuenta from './components/5 - Cuenta/cuenta';
-import PrivateRoute from './components/PrivateRoutes';
+import ListadoCDE from './components/3 - ListadoCDE/listadoCDE';
+import PrivateRoute from './components/PrivateRoutes'
 import firebaseApp from '../credenciales';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
-import AgregarCDE from './components/4 - NuevoCDE/agregarCDE';
 
 const auth = getAuth(firebaseApp);
 const firestore = getFirestore(firebaseApp);
@@ -50,7 +50,7 @@ function App() {
               path="/agregar-cde"
               element={
                 <PrivateRoute usuarioGlobal={{ ...usuarioGlobal, role }} allowedRoles={["admin"]}>
-                  <AgregarCDE />
+                  <NuevoCDE />
                 </PrivateRoute>
               }
             />

@@ -100,20 +100,6 @@ const Cuenta = () => {
                             <label htmlFor="profilePicture">Nueva foto de perfil</label>
                             <input type="file" id="profilePicture" onChange={handleFileChange} />
                         </div>
-                        <div className="input-group">
-                            <label htmlFor="role">Nuevo cargo</label>
-                            <select
-                                id="role"
-                                value={role}
-                                onChange={(e) => setRole(e.target.value)}
-                            >
-                                {roles.map((role) => (
-                                    <option key={role} value={role}>
-                                        {role}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
                         <div className="buttons">
                             <button type="submit" disabled={uploading}>
                                 {uploading ? 'Guardando...' : 'Guardar'}

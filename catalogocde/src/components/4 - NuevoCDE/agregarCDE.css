@@ -1,9 +1,14 @@
-.agregar-container{
-    display: flex;
-    justify-content: center;
+body {
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
-.agregar-cde{
+.agregar-container {
+    display: flex;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.agregar-cde {
     background-color: rgba(240, 248, 255, 0.8);
     width: 50%;
     margin: 20px;
@@ -11,12 +16,12 @@
     border-radius: 20px;
 }
 
-.agregar-cde form input{
+.agregar-cde form input {
     background-color: aliceblue;
     width: 99.5%;
     margin-bottom: 5px;
 }
 
-.remove-tag{
+.remove-tag {
     background-color: brown;
 }
