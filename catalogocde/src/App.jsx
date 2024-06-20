@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Logeo from './components/2 - Logeo/logeo';
 import Header from './components/parts/header/header';
 import Home from './components/1 - vistaHome/Home';
-import AgregarCDE from './components/4 - NuevoCDE/AgregarCDE';
+import AgregarCDE from './components/4 - NuevoCDE/agregarCDE';
 import Cuenta from './components/5 - Cuenta/cuenta';
 import ListadoCDE from './components/3 - ListadoCDE/listadoCDE';
 import PrivateRoute from './components/PrivateRoutes';
@@ -11,7 +11,6 @@ import LoadingSpinner from './components/parts/loading-spinner/LoadingSpinner'; 
 import firebaseApp from '../credenciales';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
-
 
 
 const auth = getAuth(firebaseApp);

@@ -1,7 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
 * {
-    font-family: 'Poppins';
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 .header {
@@ -9,14 +12,26 @@
     justify-content: space-between;
     align-items: center;
     height: 70px;
-    padding: 15px 15px;
+    padding: 0 20px;
+    /* Aumentamos el espacio de relleno horizontal */
     background-color: rgb(2, 2, 2);
     color: white;
+}
 
+.header-logo {
+    flex: 1;
+    /* El logo ocupa el espacio restante */
 }
 
 .header-logo .logo {
     height: 50px;
+    width: auto;
+    /* Ajustamos el tamaño del logo */
+}
+
+.header-nav {
+    display: flex;
+    align-items: center;
 }
 
 .header-nav ul {
@@ -25,42 +40,63 @@
     padding: 0;
     margin: 0;
     align-items: center;
-    /* Añadir esta línea para alinear los elementos de la lista verticalmente */
 }
 
 .header-nav li {
-    margin: 0 15px;
+    margin-left: 20px;
     display: flex;
     align-items: center;
-    /* Añadir esta línea para alinear el contenido de los elementos de la lista verticalmente */
+    /* Añadimos margen izquierdo entre elementos */
 }
 
 .header-nav a {
-    color: white;
-    padding: 1px 4px;
-    text-decoration: none;
-    font-size: 16px;
     display: flex;
     align-items: center;
-    /* Añadir esta línea para alinear el texto de los enlaces verticalmente */
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    /* Reducimos el tamaño de fuente en pantallas pequeñas */
+    padding: 8px 10px;
+    /* Ajustamos el padding de los enlaces */
+    border-radius: 4px;
+    /* Añadimos borde redondeado */
 }
 
 .header-nav a:hover {
     background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 5px;
     text-decoration: underline;
-    transition: 500ms;
+    transition: 400ms;
 }
 
 .profile-picture {
     width: 40px;
-    /* Define el ancho deseado */
     height: 40px;
-    /* Define la altura deseada */
     border-radius: 50%;
-    /* Hace que la imagen sea redonda */
     object-fit: cover;
-    /* Ajusta la imagen para cubrir el área designada */
-    margin-right: 8px;
-    /* Añadir un pequeño margen a la derecha para espaciar la imagen del texto */
+}
+
+@media screen and (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        height: auto;
+        padding: 10px;
+    }
+
+    .header-nav ul {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-nav li {
+        display: flex;
+        justify-content: space-around;
+        margin: 5px 0;
+        width: 100%;
+    }
+
+    .header-nav a {
+        font-size: 16px;
+        /* Ajustamos el tamaño de fuente para enlaces en móviles */
+        padding: 10px 15px;
+    }
 }

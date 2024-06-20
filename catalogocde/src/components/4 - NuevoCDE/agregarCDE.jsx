@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { firestore, storage } from '../../../credenciales';
 import { collection, addDoc } from 'firebase/firestore';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+import * as pdfjs from 'pdfjs-dist';
 import './agregarCDE.css';
 
 const AgregarCDE = () => {
@@ -19,13 +20,44 @@ const AgregarCDE = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-
+  const fileInputRef = useRef(null);
 
   const handlePdfChange = async (e) => {
     const file = e.target.files[0];
     setPdfFile(file);
-  };
 
+    if (file) {
+      try {
+        const fileReader = new FileReader();
+        fileReader.onload = async () => {
+          const arrayBuffer = fileReader.result;
+          try {
+            pdfjs.GlobalWorkerOptions.workerSrc = 'pdf.worker.min.mjs'; // Ruta al worker de pdfjs
+            const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
+            const numPages = pdf.numPages;
+            let extractedText = '';
+
+            for (let i = 1; i <= numPages; i++) {
+              const page = await pdf.getPage(i);
+              const pageText = await page.getTextContent();
+              const pageLines = pageText.items.map((item) => item.str).join('\n');
+              extractedText += pageLines + '\n';
+            }
+
+            // Actualiza el estado con el texto extraído del PDF
+            setPdfText(extractedText.trim());
+          } catch (error) {
+            console.error('Error al parsear el PDF:', error);
+            setError('Error al procesar el PDF.');
+          }
+        };
+        fileReader.readAsArrayBuffer(file);
+      } catch (error) {
+        console.error('Error al cargar el archivo PDF:', error);
+        setError('Error al cargar el archivo PDF.');
+      }
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,11 +85,12 @@ const AgregarCDE = () => {
         pdfText,
         projectRef,
         vertical,
-        tipo
+        tipo,
       };
       await addDoc(collection(firestore, 'cdes'), cdeData);
       alert('CDE añadido correctamente');
 
+      // Limpiar campos después de guardar
       setName('');
       setSector('');
       setClient('');
@@ -68,7 +101,6 @@ const AgregarCDE = () => {
       setProjectRef('');
       setVertical('');
       setComercial('');
-
       setTipo('');
     } catch (error) {
       console.error('Error subiendo el PDF a Firebase Storage:', error);
@@ -78,6 +110,11 @@ const AgregarCDE = () => {
     }
   };
 
+  const openFileDialog = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
 
   return (
     <div className="agregar-container">
@@ -97,10 +134,13 @@ const AgregarCDE = () => {
               />
             </div>
             <div className="input-group">
-              <label htmlFor="name">Sector</label>
+              <label htmlFor="sector">Sector</label>
               <input
                 type="text"
-
+                id="sector"
+                value={sector}
+                onChange={(e) => setSector(e.target.value)}
+                required
               />
             </div>
             <div className="input-group">
@@ -172,7 +212,7 @@ const AgregarCDE = () => {
                 id="pdf"
                 accept="application/pdf"
                 onChange={handlePdfChange}
-              // required
+                ref={fileInputRef}
               />
             </div>
             <div className="input-group">
