@@ -13,8 +13,9 @@ const Cuenta = () => {
     const [editing, setEditing] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [profilePicURL, setProfilePicURL] = useState('');
-    const [role, setRole] = useState(''); // Cargo seleccionado
-    const [roles, setRoles] = useState(['Admin', 'Comercial', 'Partner']); // Roles disponibles
+    const [role, setRole] = useState('');
+    const [cargo, setCargo] = useState('');
+    const [cargoOptions] = useState(['Admin', 'Comercial', 'Partner']); // Opciones disponibles para cargo
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -31,7 +32,8 @@ const Cuenta = () => {
         if (userDoc.exists()) {
             const data = userDoc.data();
             setName(data.name || '');
-            setRole(data.role || ''); // Cargar el cargo del usuario
+            setRole(data.role || '');
+            setCargo(data.cargo || ''); // Cargar el campo de cargo si existe
             if (data.profilePicture) {
                 setProfilePicURL(data.profilePicture);
             }
@@ -46,7 +48,8 @@ const Cuenta = () => {
 
         const userData = {
             name,
-            role, // Guardar el cargo seleccionado
+            role,
+            cargo, // Guardar el cargo seleccionado
         };
 
         if (profilePicture) {
@@ -82,13 +85,17 @@ const Cuenta = () => {
                     <img src={profilePicURL} alt="Perfil" className="profile-picture" />
                 </div>
                 <div className="input-group">
-                    <label htmlFor="role">Cargo</label>
+                    <label htmlFor="cargo">Cargo</label>
+                    <p>{cargo}</p>
+                </div>
+                <div className="input-group">
+                    <label htmlFor="rol">Rol</label>
                     <p>{role}</p>
                 </div>
                 {editing ? (
                     <form onSubmit={handleSubmit}>
                         <div className="input-group">
-                            <label htmlFor="name">Nuevo nombre</label>
+                            <label htmlFor="name">Nombre</label>
                             <input
                                 type="text"
                                 id="name"
@@ -97,8 +104,20 @@ const Cuenta = () => {
                             />
                         </div>
                         <div className="input-group">
-                            <label htmlFor="profilePicture">Nueva foto de perfil</label>
+                            <label htmlFor="profilePicture">Foto de perfil</label>
                             <input type="file" id="profilePicture" onChange={handleFileChange} />
+                        </div>
+                        <div className="input-group">
+                            <label htmlFor="cargo">Cargo</label>
+                            <select
+                                id="cargo"
+                                value={cargo}
+                                onChange={(e) => setCargo(e.target.value)}
+                            >
+                                {cargoOptions.map(option => (
+                                    <option key={option} value={option}>{option}</option>
+                                ))}
+                            </select>
                         </div>
                         <div className="buttons">
                             <button type="submit" disabled={uploading}>

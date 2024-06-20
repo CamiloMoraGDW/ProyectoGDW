@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { firestore } from '../../../credenciales';
 import { collection, getDocs, updateDoc, deleteDoc, doc } from 'firebase/firestore';
-import './listadoCDE.css'
-import { ref } from 'firebase/storage';
+import './listadoCDE.css';
+import { useAuth } from '../../context/AuthContext';
 
 const ListadoCDE = () => {
+    const { usuarioGlobal } = useAuth();
     const [cdes, setCdes] = useState([]);
+    const [originalCdes, setOriginalCdes] = useState([]); // Estado para almacenar la lista original de CDEs
     const [searchTerm, setSearchTerm] = useState('');
     const [editCde, setEditCde] = useState(null);
     const [updatedData, setUpdatedData] = useState({
@@ -19,47 +21,47 @@ const ListadoCDE = () => {
         tipo: ''
     });
     const [isSaving, setIsSaving] = useState(false);
-    const [showConfirmPopup, setShowConfirmPopup] = useState(false); // Estado para controlar el popup
-    const [cdeToDelete, setCdeToDelete] = useState(null); // Estado para almacenar el CDE a eliminar
-    const [isDeleting, setIsDeleting] = useState(false); // Estado para controlar el indicador de carga
+    const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+    const [cdeToDelete, setCdeToDelete] = useState(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
         const fetchCdes = async () => {
             const querySnapshot = await getDocs(collection(firestore, 'cdes'));
             const cdeList = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
             setCdes(cdeList);
+            setOriginalCdes(cdeList); // Guardar la lista original al inicio
         };
 
         fetchCdes();
     }, []);
 
-    const handleClean = () => {
-        const fetchCdes = async () => {
-            const querySnapshot = await getDocs(collection(firestore, 'cdes'));
-            const cdeList = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-            setCdes(cdeList);
-        };
-        fetchCdes();
-    }
+    const handleClean = async () => {
+        setSearchTerm('');
+        setCdes(originalCdes); // Restaurar la lista original al limpiar
+    };
 
     const handleSearch = () => {
         const lowercasedSearchTerm = searchTerm.toLowerCase();
-        const filteredCdes = cdes.filter(cde => {
-            const lowercasedName = cde.name.toLowerCase();
-            const lowercasedClient = cde.client.toLowerCase();
-            const lowercasedCountry = cde.country.toLowerCase();
-            const lowercasedTags = cde.tags.map(tag => tag.toLowerCase());
-            const lowercasedRef = cde.ref.toLowerCase();
-            const lowercasedVertical = cde.vertical.toLowerCase();
-            const lowercasedSecor = cde.sector.toLowerCase();
-            const lowercasedTipo = cde.tipo.toLowerCase();
-
+        const filteredCdes = originalCdes.filter(cde => {
+            const lowercasedName = cde.name?.toLowerCase() || '';
+            const lowercasedClient = cde.client?.toLowerCase() || '';
+            const lowercasedCountry = cde.country?.toLowerCase() || '';
+            const lowercasedTags = (cde.tags || []).map(tag => tag.toLowerCase());
+            const lowercasedRef = cde.ref?.toLowerCase() || '';
+            const lowercasedVertical = cde.vertical?.toLowerCase() || '';
+            const lowercasedSector = cde.sector?.toLowerCase() || '';
+            const lowercasedTipo = cde.tipo?.toLowerCase() || '';
 
             return (
                 lowercasedName.includes(lowercasedSearchTerm) ||
                 lowercasedClient.includes(lowercasedSearchTerm) ||
                 lowercasedCountry.includes(lowercasedSearchTerm) ||
-                lowercasedTags.some(tag => tag.includes(lowercasedSearchTerm))
+                lowercasedTags.some(tag => tag.includes(lowercasedSearchTerm)) ||
+                lowercasedRef.includes(lowercasedSearchTerm) ||
+                lowercasedVertical.includes(lowercasedSearchTerm) ||
+                lowercasedSector.includes(lowercasedSearchTerm) ||
+                lowercasedTipo.includes(lowercasedSearchTerm)
             );
         });
 
@@ -83,8 +85,15 @@ const ListadoCDE = () => {
     const handleUpdate = async () => {
         setIsSaving(true);
         try {
-            await updateDoc(doc(firestore, 'cdes', editCde.id), updatedData);
-            setCdes(cdes.map(cde => (cde.id === editCde.id ? { ...cde, ...updatedData } : cde)));
+            // Filtrar campos undefined en updatedData
+            const filteredData = {};
+            for (let key in updatedData) {
+                if (updatedData[key] !== undefined) {
+                    filteredData[key] = updatedData[key];
+                }
+            }
+            await updateDoc(doc(firestore, 'cdes', editCde.id), filteredData);
+            setCdes(cdes.map(cde => (cde.id === editCde.id ? { ...cde, ...filteredData } : cde)));
             setEditCde(null);
             alert('CDE actualizado correctamente');
         } catch (error) {
@@ -100,7 +109,7 @@ const ListadoCDE = () => {
     };
 
     const confirmDelete = async () => {
-        setIsDeleting(true); // Mostrar el indicador de carga
+        setIsDeleting(true);
         try {
             await deleteDoc(doc(firestore, 'cdes', cdeToDelete));
             setCdes(cdes.filter(cde => cde.id !== cdeToDelete));
@@ -110,7 +119,7 @@ const ListadoCDE = () => {
             console.error('Error eliminando el CDE:', error);
             alert('Hubo un error eliminando el CDE.');
         }
-        setIsDeleting(false); // Ocultar el indicador de carga
+        setIsDeleting(false);
     };
 
     const cancelDelete = () => {
@@ -120,7 +129,7 @@ const ListadoCDE = () => {
 
     return (
         <div className="listado-container">
-            <h1>Listado de CDEs</h1>
+            <h1>Casos de Exito - Godoworks</h1>
             <div className="search-bar">
                 <input
                     type="text"
@@ -129,7 +138,7 @@ const ListadoCDE = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <button onClick={handleSearch}>Buscar</button>
-                <button onClick={handleClean}>Limpirar</button>
+                <button onClick={handleClean}>Limpiar</button>
             </div>
             <div className="cde-list">
                 {cdes.map((cde) => (
@@ -166,6 +175,7 @@ const ListadoCDE = () => {
                             <div>
                                 <div className="left-facts">
                                     <h2>{cde.name}</h2>
+                                    <p><strong></strong></p>
                                     <p><strong>Cliente:</strong> {cde.client}</p>
                                     <p><strong>País:</strong> {cde.country}</p>
                                     <p><strong>Fecha de creación:</strong> {cde.creationDate}</p>
@@ -175,8 +185,12 @@ const ListadoCDE = () => {
                                     <p><strong>Vertical:</strong> {cde.vertical}</p>
                                 </div>
                                 <a href={cde.pdfURL} target="_blank" rel="noopener noreferrer">Descargar</a><br />
-                                <button onClick={() => handleEdit(cde)}>Editar</button>
-                                <button onClick={() => handleDelete(cde.id)}>Eliminar</button>
+                                {usuarioGlobal?.role === 'admin' && (
+                                    <>
+                                        <button onClick={() => handleEdit(cde)}>Editar</button>
+                                        <button onClick={() => handleDelete(cde.id)}>Eliminar</button>
+                                    </>
+                                )}
                             </div>
                         )}
                     </div>
@@ -188,7 +202,7 @@ const ListadoCDE = () => {
                     <div className="popup">
                         <h3>¿Está seguro que desea eliminar este CDE?</h3>
                         {isDeleting ? (
-                            <p>Cargando...</p> // Mostrar "Cargando..." mientras se elimina
+                            <p>Cargando...</p>
                         ) : (
                             <>
                                 <button onClick={confirmDelete}>Sí, eliminar</button>

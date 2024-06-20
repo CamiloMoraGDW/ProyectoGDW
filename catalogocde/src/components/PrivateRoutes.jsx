@@ -1,3 +1,4 @@
+// src/components/PrivateRoutes.js
 import React, { useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 

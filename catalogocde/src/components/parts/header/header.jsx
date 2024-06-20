@@ -1,3 +1,4 @@
+// src/components/parts/header/header.jsx
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
@@ -8,6 +9,7 @@ import './header.css'
 
 const Header = () => {
     const [profilePicURL, setProfilePicURL] = useState('');
+    const [role, setRole] = useState(null);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -16,6 +18,7 @@ const Header = () => {
                 if (userDoc.exists()) {
                     const data = userDoc.data();
                     setProfilePicURL(data.profilePicture || '');
+                    setRole(data.role); // Obtener y establecer el rol del usuario
                 }
             }
         });
@@ -32,7 +35,7 @@ const Header = () => {
             <nav className="header-nav">
                 <ul>
                     <li><Link to="/lista-cdes">Lista de CDE's</Link></li>
-                    <li><Link to="/agregar-cde">Agregar CDE</Link></li>
+                    {role === 'admin' && <li><Link to="/agregar-cde">Agregar CDE</Link></li>}
                     <li>
                         <Link to="/cuenta">
                             {profilePicURL ? (
