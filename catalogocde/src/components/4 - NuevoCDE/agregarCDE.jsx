@@ -1,8 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { firestore, storage } from '../../../credenciales';
 import { collection, addDoc } from 'firebase/firestore';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
-import * as pdfjs from 'pdfjs-dist';
+import axios from 'axios';
 import './agregarCDE.css';
 
 const AgregarCDE = () => {
@@ -20,42 +20,29 @@ const AgregarCDE = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const fileInputRef = useRef(null);
-
-  const handlePdfChange = async (e) => {
+  const handlePdfChange = (e) => {
     const file = e.target.files[0];
     setPdfFile(file);
+  };
 
-    if (file) {
-      try {
-        const fileReader = new FileReader();
-        fileReader.onload = async () => {
-          const arrayBuffer = fileReader.result;
-          try {
-            pdfjs.GlobalWorkerOptions.workerSrc = 'pdf.worker.min.mjs'; // Ruta al worker de pdfjs
-            const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
-            const numPages = pdf.numPages;
-            let extractedText = '';
+  const extractTextFromPdf = async (pdfURL) => {
+    const apiKey = 'cmora@godoworks.com_PP00hg32TF90fJ7I9d9XjLSKNsaN3PJi9WpStljO24UrPOWUi5mumK0k72P99Qvl'; // Reemplaza con tu clave API de PDF.co
+    const endpoint = 'https://api.pdf.co/v1/pdf/convert/to/json';
+    const params = {
+      url: pdfURL
+    };
 
-            for (let i = 1; i <= numPages; i++) {
-              const page = await pdf.getPage(i);
-              const pageText = await page.getTextContent();
-              const pageLines = pageText.items.map((item) => item.str).join('\n');
-              extractedText += pageLines + '\n';
-            }
-
-            // Actualiza el estado con el texto extraído del PDF
-            setPdfText(extractedText.trim());
-          } catch (error) {
-            console.error('Error al parsear el PDF:', error);
-            setError('Error al procesar el PDF.');
-          }
-        };
-        fileReader.readAsArrayBuffer(file);
-      } catch (error) {
-        console.error('Error al cargar el archivo PDF:', error);
-        setError('Error al cargar el archivo PDF.');
-      }
+    try {
+      const response = await axios.post(endpoint, params, {
+        headers: {
+          'x-api-key': apiKey,
+          'Content-Type': 'application/json'
+        }
+      });
+      return response.data.body; // body contiene el JSON resultante
+    } catch (error) {
+      console.error('Error al extraer texto del PDF:', error);
+      throw new Error('No se pudo extraer el texto del PDF.');
     }
   };
 
@@ -75,6 +62,8 @@ const AgregarCDE = () => {
       await uploadBytes(storageReference, pdfFile);
       const pdfURL = await getDownloadURL(storageReference);
 
+      const extractedJson = await extractTextFromPdf(pdfURL);
+
       const cdeData = {
         name,
         sector,
@@ -82,15 +71,14 @@ const AgregarCDE = () => {
         country,
         creationDate,
         pdfURL,
-        pdfText,
+        pdfText: extractedJson, // Guardar el JSON extraído
         projectRef,
         vertical,
-        tipo,
+        tipo
       };
       await addDoc(collection(firestore, 'cdes'), cdeData);
       alert('CDE añadido correctamente');
 
-      // Limpiar campos después de guardar
       setName('');
       setSector('');
       setClient('');
@@ -103,16 +91,10 @@ const AgregarCDE = () => {
       setComercial('');
       setTipo('');
     } catch (error) {
-      console.error('Error subiendo el PDF a Firebase Storage:', error);
-      setError('Hubo un error subiendo el PDF a Firebase Storage.');
+      console.error('Error subiendo el PDF a Firebase Storage o extrayendo texto:', error);
+      setError('Hubo un error subiendo el PDF a Firebase Storage o extrayendo texto.');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const openFileDialog = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
     }
   };
 
@@ -212,7 +194,7 @@ const AgregarCDE = () => {
                 id="pdf"
                 accept="application/pdf"
                 onChange={handlePdfChange}
-                ref={fileInputRef}
+                required
               />
             </div>
             <div className="input-group">
@@ -226,10 +208,8 @@ const AgregarCDE = () => {
               />
             </div>
           </div>
-          {error && <p className="error">{error}</p>}
-          <div className="buttons">
-            <button type="submit">Guardar CDE</button>
-          </div>
+          <button type="submit">Agregar CDE</button>
+          {error && <div className="error-message">{error}</div>}
         </form>
       </div>
     </div>
