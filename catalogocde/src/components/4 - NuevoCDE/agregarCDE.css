@@ -16,12 +16,12 @@ body {
     border-radius: 20px;
 }
 
+.agregar-cde h1{
+    color: black;
+}
+
 .agregar-cde form input {
     background-color: aliceblue;
     width: 99.5%;
     margin-bottom: 5px;
-}
-
-.remove-tag {
-    background-color: brown;
 }

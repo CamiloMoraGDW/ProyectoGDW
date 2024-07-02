@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { firestore, storage } from '../../../credenciales';
 import { collection, addDoc } from 'firebase/firestore';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
-import axios from 'axios';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import './agregarCDE.css';
+import pdfToText from 'react-pdftotext';
 
 const AgregarCDE = () => {
   const [name, setName] = useState('');
@@ -16,34 +17,67 @@ const AgregarCDE = () => {
   const [comercial, setComercial] = useState('');
   const [tipo, setTipo] = useState('');
   const [pdfFile, setPdfFile] = useState(null);
-  const [pdfText, setPdfText] = useState('');
+  const [pdfText, setPdfText] = useState(''); // Estado para almacenar el texto del PDF
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const auth = getAuth();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+  }, [auth]);
+
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    switch (id) {
+      case 'name':
+        setName(value);
+        break;
+      case 'sector':
+        setSector(value);
+        break;
+      case 'client':
+        setClient(value);
+        break;
+      case 'country':
+        setCountry(value);
+        break;
+      case 'projectRef':
+        setProjectRef(value);
+        break;
+      case 'vertical':
+        setVertical(value);
+        break;
+      case 'comercial':
+        setComercial(value);
+        break;
+      case 'tipo':
+        setTipo(value);
+        break;
+      case 'creationDate':
+        setCreationDate(value);
+        break;
+      default:
+        break;
+    }
+  };
 
   const handlePdfChange = (e) => {
     const file = e.target.files[0];
     setPdfFile(file);
-  };
 
-  const extractTextFromPdf = async (pdfURL) => {
-    const apiKey = 'cmora@godoworks.com_PP00hg32TF90fJ7I9d9XjLSKNsaN3PJi9WpStljO24UrPOWUi5mumK0k72P99Qvl'; // Reemplaza con tu clave API de PDF.co
-    const endpoint = 'https://api.pdf.co/v1/pdf/convert/to/json';
-    const params = {
-      url: pdfURL
-    };
-
-    try {
-      const response = await axios.post(endpoint, params, {
-        headers: {
-          'x-api-key': apiKey,
-          'Content-Type': 'application/json'
-        }
+    pdfToText(file)
+      .then(text => {
+        console.log('Texto extraído del PDF:', text);
+        setPdfText(text); // Guardar el texto del PDF en el estado
+      })
+      .catch(error => {
+        console.log('Error al extraer el texto del pdf:', error);
+        setError('Error al extraer el texto del PDF');
       });
-      return response.data.body; // body contiene el JSON resultante
-    } catch (error) {
-      console.error('Error al extraer texto del PDF:', error);
-      throw new Error('No se pudo extraer el texto del PDF.');
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -57,12 +91,16 @@ const AgregarCDE = () => {
       return;
     }
 
+    if (!user) {
+      setError('Debes iniciar sesión para subir un archivo.');
+      setLoading(false);
+      return;
+    }
+
     try {
       const storageReference = storageRef(storage, `pdfs/${pdfFile.name}`);
       await uploadBytes(storageReference, pdfFile);
       const pdfURL = await getDownloadURL(storageReference);
-
-      const extractedJson = await extractTextFromPdf(pdfURL);
 
       const cdeData = {
         name,
@@ -71,25 +109,29 @@ const AgregarCDE = () => {
         country,
         creationDate,
         pdfURL,
-        pdfText: extractedJson, // Guardar el JSON extraído
+        pdfText, // Incluir el texto extraído del PDF
         projectRef,
         vertical,
         tipo
       };
-      await addDoc(collection(firestore, 'cdes'), cdeData);
+
+      // Guardar datos en Firestore
+      const docRef = await addDoc(collection(firestore, 'cdes'), cdeData);
       alert('CDE añadido correctamente');
 
+      // Limpiar formulario después de éxito
       setName('');
       setSector('');
       setClient('');
       setCountry('');
       setCreationDate('');
       setPdfFile(null);
-      setPdfText('');
       setProjectRef('');
       setVertical('');
       setComercial('');
       setTipo('');
+
+      console.log('Documento CDE añadido con ID:', docRef.id);
     } catch (error) {
       console.error('Error subiendo el PDF a Firebase Storage o extrayendo texto:', error);
       setError('Hubo un error subiendo el PDF a Firebase Storage o extrayendo texto.');
@@ -111,7 +153,7 @@ const AgregarCDE = () => {
                 type="text"
                 id="name"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={handleInputChange}
                 required
               />
             </div>
@@ -121,7 +163,7 @@ const AgregarCDE = () => {
                 type="text"
                 id="sector"
                 value={sector}
-                onChange={(e) => setSector(e.target.value)}
+                onChange={handleInputChange}
                 required
               />
             </div>
@@ -131,7 +173,7 @@ const AgregarCDE = () => {
                 type="text"
                 id="client"
                 value={client}
-                onChange={(e) => setClient(e.target.value)}
+                onChange={handleInputChange}
                 required
               />
             </div>
@@ -141,7 +183,7 @@ const AgregarCDE = () => {
                 type="text"
                 id="country"
                 value={country}
-                onChange={(e) => setCountry(e.target.value)}
+                onChange={handleInputChange}
                 required
               />
             </div>
@@ -151,7 +193,7 @@ const AgregarCDE = () => {
                 type="text"
                 id="projectRef"
                 value={projectRef}
-                onChange={(e) => setProjectRef(e.target.value)}
+                onChange={handleInputChange}
                 required
               />
             </div>
@@ -161,7 +203,7 @@ const AgregarCDE = () => {
                 type="text"
                 id="vertical"
                 value={vertical}
-                onChange={(e) => setVertical(e.target.value)}
+                onChange={handleInputChange}
                 required
               />
             </div>
@@ -173,7 +215,7 @@ const AgregarCDE = () => {
                 type="text"
                 id="comercial"
                 value={comercial}
-                onChange={(e) => setComercial(e.target.value)}
+                onChange={handleInputChange}
                 required
               />
             </div>
@@ -183,7 +225,7 @@ const AgregarCDE = () => {
                 type="text"
                 id="tipo"
                 value={tipo}
-                onChange={(e) => setTipo(e.target.value)}
+                onChange={handleInputChange}
                 required
               />
             </div>
@@ -203,7 +245,7 @@ const AgregarCDE = () => {
                 type="date"
                 id="creationDate"
                 value={creationDate}
-                onChange={(e) => setCreationDate(e.target.value)}
+                onChange={handleInputChange}
                 required
               />
             </div>

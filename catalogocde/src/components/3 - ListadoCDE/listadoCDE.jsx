@@ -18,7 +18,8 @@ const ListadoCDE = () => {
         ref: '',
         vertical: '',
         sector: '',
-        tipo: ''
+        tipo: '',
+        pdfText: '' // Agrega pdfText a updatedData para edición
     });
     const [isSaving, setIsSaving] = useState(false);
     const [showConfirmPopup, setShowConfirmPopup] = useState(false);
@@ -47,21 +48,21 @@ const ListadoCDE = () => {
             const lowercasedName = cde.name?.toLowerCase() || '';
             const lowercasedClient = cde.client?.toLowerCase() || '';
             const lowercasedCountry = cde.country?.toLowerCase() || '';
-            const lowercasedTags = (cde.tags || []).map(tag => tag.toLowerCase());
             const lowercasedRef = cde.ref?.toLowerCase() || '';
             const lowercasedVertical = cde.vertical?.toLowerCase() || '';
             const lowercasedSector = cde.sector?.toLowerCase() || '';
             const lowercasedTipo = cde.tipo?.toLowerCase() || '';
+            const lowercasedPdfText = cde.pdfText?.toLowerCase() || ''; // Agrega búsqueda por pdfText
 
             return (
                 lowercasedName.includes(lowercasedSearchTerm) ||
                 lowercasedClient.includes(lowercasedSearchTerm) ||
                 lowercasedCountry.includes(lowercasedSearchTerm) ||
-                lowercasedTags.some(tag => tag.includes(lowercasedSearchTerm)) ||
                 lowercasedRef.includes(lowercasedSearchTerm) ||
                 lowercasedVertical.includes(lowercasedSearchTerm) ||
                 lowercasedSector.includes(lowercasedSearchTerm) ||
-                lowercasedTipo.includes(lowercasedSearchTerm)
+                lowercasedTipo.includes(lowercasedSearchTerm) ||
+                lowercasedPdfText.includes(lowercasedSearchTerm) // Incluye pdfText en la búsqueda
             );
         });
 
@@ -78,7 +79,8 @@ const ListadoCDE = () => {
             ref: cde.ref,
             vertical: cde.vertical,
             sector: cde.sector,
-            tipo: cde.tipo
+            tipo: cde.tipo,
+            pdfText: cde.pdfText || '' // Establecer pdfText para la edición
         });
     };
 
@@ -129,11 +131,11 @@ const ListadoCDE = () => {
 
     return (
         <div className="listado-container">
-            <h1>Casos de Exito - Godoworks</h1>
+            <h1>Casos de Éxito - Godoworks</h1>
             <div className="search-bar">
                 <input
                     type="text"
-                    placeholder="Buscar por nombre, cliente, país o tag..."
+                    placeholder="Buscar por nombre, cliente, país, etiqueta o texto del PDF..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />

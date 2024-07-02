@@ -19,7 +19,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 50px;
 }
 
 .log-left-side .content {
@@ -27,9 +26,8 @@
 }
 
 .log-left-side .content .texto {
-    color: #fff;
+    color: white;
     font-size: 1.3rem;
-    padding-left: 20px;
 }
 
 .log-right-side {
@@ -41,7 +39,7 @@
 }
 
 .form-box {
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: black;
     /* Fondo blanco con transparencia */
     width: 300px;
     padding: 20px;
@@ -55,9 +53,14 @@
     align-items: center;
 }
 
-h1 {
+.form-box button:first-child{
+    background-color: aliceblue;
+    color: black;
+}
+
+.form-box h1 {
     text-align: center;
-    color: #0471A2;
+    color: white;
 }
 
 .input-box {
@@ -71,7 +74,8 @@ input {
     padding: 10px;
     border-radius: 5px;
     border: none;
-    border-bottom: 2px solid aliceblue;
+    color: aliceblue;
+    border-bottom: solid aliceblue;
     outline: none;
     background-color: transparent;
     /* Input transparente */
@@ -90,8 +94,8 @@ button {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    background-color: #0471A2;
-    color: white;
+    background-color:  whitesmoke;
+    color: black;
     font-size: 16px;
 }
 
@@ -109,12 +113,12 @@ button:hover {
 }
 
 .switch-form:hover {
-    color: #0471A2;
+    color: black;
     cursor: pointer;
     background-color: rgba(255, 255, 255, 0.7);
     transition: 0.5s;
 }
-
+/* 
 @media (max-width: 860px) {
 
     .left-side .content {
@@ -150,4 +154,4 @@ button:hover {
     svg {
         display: none;
     }
-}
+} */

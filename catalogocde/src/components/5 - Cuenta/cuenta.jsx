@@ -75,7 +75,7 @@ const Cuenta = () => {
     return (
         <div className="cuenta-container">
             <div className="cuenta">
-                <h1>Cuenta</h1>
+                <h2 style={{ textAlign: 'center' }}>Cuenta</h2>
                 <div className="input-group">
                     <label htmlFor="name">Nombre</label>
                     <p>{name}</p>

@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: rgba(4, 113, 162, 0.2);
+    background-color: darkgray;
 }
 
 .cuenta {
@@ -50,7 +50,7 @@
 button {
     width: 100%;
     padding: 8px;
-    background: #0471A2;
+    background: black;
     color: white;
     border: none;
     border-radius: 4px;
